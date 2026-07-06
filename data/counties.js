@@ -23,6 +23,37 @@ window.NATIONAL_POLICIES = [
   { id:"np-10", name:"National School Re-entry Guidelines (2020)", year:2020, status:"Adopted", impl_pct:35, category:"Education", gap:"Inconsistent enforcement across counties", doc_url:"https://www.education.go.ke/sites/default/files/2022-05/2020RH_NationalSchoolReEntryGuidelines.pdf" }
 ];
 
+// ── ADVOCACY SCORECARD METHODOLOGY ──
+// County Policy and Legislative Advocacy Scorecard: 7 stages, 15 milestones.
+// Each milestone is scored 0 (Not Started) / 1 (Started/Ongoing) / 2 (Completed) per county.
+// All scores start at 0 and are filled in by staff via the Advocacy Scorecard Google Sheet tab.
+window.ADVOCACY_MILESTONES = [
+  { id:"m01", stage:1, stage_name:"Policy Development", name:"Situation Analysis", indicator:"Evidence generated and policy need documented." },
+  { id:"m02", stage:1, stage_name:"Policy Development", name:"Policy Drafted", indicator:"Draft policy developed through technical consultations." },
+  { id:"m03", stage:1, stage_name:"Policy Development", name:"Policy Adopted", indicator:"Policy approved by the County Executive Committee." },
+  { id:"m04", stage:2, stage_name:"Legislative Preparation", name:"Bill Developed", indicator:"Bill drafted to give legal effect to the policy." },
+  { id:"m05", stage:2, stage_name:"Legislative Preparation", name:"Executive Approval", indicator:"Bill approved for submission to the County Assembly." },
+  { id:"m06", stage:3, stage_name:"Political Engagement", name:"Bill Tabled", indicator:"Bill formally introduced in the County Assembly." },
+  { id:"m07", stage:3, stage_name:"Political Engagement", name:"Political Support", indicator:"MCA champions secured and committee engagement undertaken." },
+  { id:"m08", stage:4, stage_name:"Community Mobilization", name:"Public Participation", indicator:"Public participation forums conducted and community views submitted." },
+  { id:"m09", stage:4, stage_name:"Community Mobilization", name:"Community Mobilization", indicator:"Communities, CSOs, CHPs, youth, women and faith leaders mobilized to support the Bill." },
+  { id:"m10", stage:4, stage_name:"Community Mobilization", name:"Media Advocacy", indicator:"Media and social media campaigns implemented." },
+  { id:"m11", stage:5, stage_name:"Legislative Action", name:"Bill Enacted", indicator:"Bill passed by the County Assembly and assented to by the Governor." },
+  { id:"m12", stage:6, stage_name:"Implementation", name:"Budget Allocated", indicator:"Dedicated implementation budget approved." },
+  { id:"m13", stage:6, stage_name:"Implementation", name:"Implementation Guidelines", indicator:"Guidelines, SOPs and operational plans developed." },
+  { id:"m14", stage:6, stage_name:"Implementation", name:"Institutional Structures", indicator:"Committees, coordination mechanisms and technical structures established." },
+  { id:"m15", stage:7, stage_name:"Accountability & Sustainability", name:"Monitoring & Reporting", indicator:"Indicators tracked, annual reports produced and oversight mechanisms functioning." }
+];
+window.ADVOCACY_MAX_SCORE = window.ADVOCACY_MILESTONES.length * 2; // 30
+
+window.advocacyRatingForPct = function(pct) {
+  if (pct >= 100) return "Completed";
+  if (pct >= 61) return "Advanced progress";
+  if (pct >= 31) return "Ongoing / Moderate progress";
+  if (pct >= 1) return "Started / Early progress";
+  return "Not Started";
+};
+
 window.COUNTIES = [
   {
     id: "homa-bay",
@@ -51,12 +82,17 @@ window.COUNTIES = [
       { id:"hb-p07", name:"Homa Bay County Facility Improvement Financing Act (2023)", year:2023, status:"Adopted", impl_pct:45, actors:["CDH","CHMT"], gap:"SRHR facility coverage gaps", advocacy:"Leverage Act for SRHR facility upgrades", doc_url:"https://s3.us-east-005.backblazeb2.com/homabaycms/webadmin/downloads/files/210e46f8-579a4c74-8589-ff3df4c8f0f4-the-homa-bay-county-health-facility-improvement-financing-act-2023.pdf" },
       { id:"hb-p08", name:"National School Re-entry Guidelines (2020)", year:2020, status:"Adopted", impl_pct:35, actors:["Ministry of Education","County Education Dept."], gap:"Implementation inconsistent at county level", advocacy:"Enforce re-entry policy for teen mothers", doc_url:"https://www.education.go.ke/sites/default/files/2022-05/2020RH_NationalSchoolReEntryGuidelines.pdf" }
     ],
-    advocacy_issues: [
-      { id:"hb-a01", problem:"Lack of dedicated County SRHR policy framework", priority:1, timeline:"2 Years", lead_org:"GVRC", member_orgs:["KELIN","NAYA","HOCEN","World Vision"], status:"Not Started", indicator:"Number of Bills and Policies enacted" },
-      { id:"hb-a02", problem:"High teenage pregnancy and dropout rate", priority:2, timeline:"3 Years", lead_org:"HOCEN", member_orgs:["NAYA","CYAN Kenya"], status:"In Progress", indicator:"School re-entry policy adopted" },
-      { id:"hb-a03", problem:"Inadequate comprehensive sexuality education in schools", priority:3, timeline:"2 Years", lead_org:"NAYA", member_orgs:["KELIN","HOCEN"], status:"Not Started", indicator:"CSE integrated in county curriculum" },
-      { id:"hb-a04", problem:"Limited adolescent contraception access", priority:4, timeline:"2 Years", lead_org:"CSA", member_orgs:["HOYMAS","NAYA"], status:"Not Started", indicator:"Youth-friendly clinics meeting standards" },
-      { id:"hb-a05", problem:"Insufficient SRHR budget allocation", priority:5, timeline:"1 Year", lead_org:"KELIN", member_orgs:["CSA","GVRC"], status:"Not Started", indicator:"SRHR budget increased by 20%" }
+    advocacy_materials: [
+      { policy:"Homa Bay County Reproductive Health Bill & Policy (2026)", theme:"Maternal Health Access, Quality of Care & Preventable Maternal Deaths", stage:"Legislative Action", materials:{ decision_maker:{label:"Executive Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"Homa Bay County Sexual & Gender-Based Violence Control and Management Bill (2024)", theme:"Gender-Based Violence (SGBV)", stage:"Legislative Action", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"Homa Bay Sexual & Gender-Based Violence Policy (2023)", theme:"Gender-Based Violence (SGBV)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"National School Re-entry Guidelines (2020)", theme:"School Re-entry for Adolescent Mothers", stage:"County Domestication & Implementation", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Poster • Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"National ASRHR Policy", theme:"Adolescent Pregnancy & Youth-Friendly SRHR Services", stage:"County Domestication", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"Homa Bay County HIV & AIDS Strategic Plan (2020–2025)", theme:"Contraceptive Access & HIV Integration", stage:"Implementation", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"Homa Bay County Health Services Act (2020)", theme:"Post-Abortion Care (PAC)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"Homa Bay County Health Services Act (2020)", theme:"Disability Inclusion in SRHR Services", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"County Integrated Development Plan (CIDP)", theme:"SRHR Mainstreaming in County Planning", stage:"Implementation", materials:{ decision_maker:{label:"CIDP Advocacy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } },
+      { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } }
     ],
     stakeholders: {
       government: ["County Department of Health","County Gender Office","CHMT","County Assembly Health Committee"],
@@ -103,12 +139,17 @@ window.COUNTIES = [
       { id:"mg-p06", name:"Reproductive Health Bill", year:2025, status:"Stalled", impl_pct:0, actors:["County Assembly","CSOs"], gap:"Political barriers; limited lobbying", advocacy:"Intensify legislator engagement", doc_url:"" },
       { id:"mg-p07", name:"Migori County Community Health Services Act (2022)", year:2022, status:"Adopted", impl_pct:45, actors:["CDH","CHMT","Community Health Volunteers"], gap:"Limited integration of SRHR in community health", advocacy:"Integrate SRHR in community health unit frameworks", doc_url:"https://migoriassembly.go.ke/wp-content/uploads/2024/10/The-Migori-County-Community-HealthServices-Act-2022.pdf" }
     ],
-    advocacy_issues: [
-      { id:"mg-a01", problem:"Stalled Reproductive Health Bill", priority:1, timeline:"1 Year", lead_org:"KELIN", member_orgs:["FIDA Kenya","NAYA","Youth for a Sustainable World"], status:"In Progress", indicator:"RH Bill passed by County Assembly" },
-      { id:"mg-a02", problem:"Inadequate youth-friendly SRHR funding", priority:2, timeline:"2 Years", lead_org:"NAYA", member_orgs:["YSW","CSOs"], status:"Not Started", indicator:"Dedicated youth SRHR budget line created" },
-      { id:"mg-a03", problem:"Lack of CSE integration in schools", priority:3, timeline:"2 Years", lead_org:"HOCEN Migori Chapter", member_orgs:["NAYA"], status:"Not Started", indicator:"CSE integrated in schools" },
-      { id:"mg-a04", problem:"High FGM prevalence among girls 15–19", priority:4, timeline:"3 Years", lead_org:"AMID", member_orgs:["Ripple Effect","CSOs"], status:"Not Started", indicator:"FGM prevalence reduced by 20%" },
-      { id:"mg-a05", problem:"Insufficient menstrual health programs", priority:5, timeline:"2 Years", lead_org:"CYAN Kenya", member_orgs:["NAYA"], status:"Not Started", indicator:"MHM policy adopted" }
+    advocacy_materials: [
+      { policy:"Proposed Migori County Reproductive Health Policy/Bill", theme:"Maternal Health Access, Quality of Care & Preventable Maternal Deaths", stage:"Policy Development", materials:{ decision_maker:{label:"Executive Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Migori County SGBV Policy (2019)", theme:"Gender-Based Violence (SGBV)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Draft Migori County GBV Policy (2026)", theme:"Gender-Based Violence (SGBV)", stage:"Policy Development", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National School Re-entry Guidelines (2020)", theme:"School Re-entry for Adolescent Mothers", stage:"County Domestication", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Poster • Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National ASRHR Policy", theme:"Adolescent Pregnancy & Youth-Friendly SRHR Services", stage:"County Domestication", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Migori County HIV & AIDS Strategic Plan", theme:"Contraceptive Access & HIV Integration", stage:"Implementation", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Migori County Community Health Services Act", theme:"Post-Abortion Care (PAC)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Migori County Gender Policy (2021–2025)", theme:"Disability Inclusion in SRHR Services", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"County Integrated Development Plan (2023–2027)", theme:"SRHR Mainstreaming in County Planning", stage:"Implementation", materials:{ decision_maker:{label:"CIDP Advocacy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } }
     ],
     stakeholders: {
       government: ["County Department of Health","County Gender Office","County Assembly","CHMT"],
@@ -155,12 +196,17 @@ window.COUNTIES = [
       { id:"kf-p06", name:"National School Re-entry Guidelines (2020)", year:2020, status:"Adopted", impl_pct:35, actors:["Ministry of Education","County Education Dept."], gap:"Inconsistent enforcement", advocacy:"County-level enforcement policy needed", doc_url:"https://www.education.go.ke/sites/default/files/2022-05/2020RH_NationalSchoolReEntryGuidelines.pdf" },
       { id:"kf-p07", name:"Menstrual Hygiene Management Policy (2019–2030)", year:2019, status:"Adopted", impl_pct:28, actors:["Ministry of Health","County Health Dept."], gap:"Implementation minimal at county level", advocacy:"Develop county MHM implementation plan", doc_url:"http://guidelines.health.go.ke:8000/media/Menstrual_Hygiene_Management_Policy_2019-2030-_May2020.pdf" }
     ],
-    advocacy_issues: [
-      { id:"kf-a01", problem:"SGBV Policy operational gap (unsigned by Governor)", priority:1, timeline:"6 Months", lead_org:"CREAW", member_orgs:["KELIN","FIDA Kenya","Kilifi Youth Network"], status:"In Progress", indicator:"Governor signs SGBV Policy 2020" },
-      { id:"kf-a02", problem:"Low RMNCAH Act implementation (30–35%)", priority:2, timeline:"2 Years", lead_org:"PATH Kenya", member_orgs:["CHMT","CSOs"], status:"In Progress", indicator:"Implementation rises to 70%" },
-      { id:"kf-a03", problem:"Inadequate youth-friendly resources and facilities", priority:3, timeline:"2 Years", lead_org:"Kilifi Youth Network", member_orgs:["NAYA","UNFPA"], status:"Not Started", indicator:"65% of facilities meet youth-friendly standards" },
-      { id:"kf-a04", problem:"No county Menstrual Health Management policy", priority:4, timeline:"1 Year", lead_org:"AMKENI Women", member_orgs:["CSOs","Schools"], status:"Not Started", indicator:"MHM Policy adopted" },
-      { id:"kf-a05", problem:"Limited adolescent SRHR guidelines at facility level", priority:5, timeline:"2 Years", lead_org:"CHMT","member_orgs":["PATH Kenya"], status:"Not Started", indicator:"County adolescent SRHR guidelines published" }
+    advocacy_materials: [
+      { policy:"Kilifi RMNCAH Act (2025)", theme:"Maternal Health Access, Quality of Care & Preventable Maternal Deaths", stage:"Implementation", materials:{ decision_maker:{label:"Executive Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Kilifi County SGBV Bill (2023)", theme:"Gender-Based Violence (SGBV)", stage:"Legislative Action", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Kilifi County SGBV Policy (2020)", theme:"Gender-Based Violence (SGBV)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National School Re-entry Guidelines (2020)", theme:"School Re-entry for Adolescent Mothers", stage:"County Domestication", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Poster • Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National ASRHR Policy", theme:"Adolescent Pregnancy & Youth-Friendly SRHR Services", stage:"County Domestication", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Menstrual Hygiene Management Policy", theme:"Menstrual Health & Hygiene Management", stage:"County Adoption & Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Persons with Disabilities Act", theme:"Disability Inclusion in SRHR Services", stage:"County Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"County Integrated Development Plan", theme:"SRHR Mainstreaming in County Planning", stage:"Implementation", materials:{ decision_maker:{label:"CIDP Advocacy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Kilifi RMNCAH Act", theme:"Post-Abortion Care (PAC)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } }
     ],
     stakeholders: {
       government: ["CDH","CHMT","County Gender Office","County Assembly","Governor's Office"],
@@ -202,12 +248,17 @@ window.COUNTIES = [
       { id:"kw-p01", name:"Kwale County SGBV Act (2023/2024)", year:2023, status:"Enacted", impl_pct:35, actors:["County Government","Police","CSOs"], gap:"Enforcement weak; limited resources", advocacy:"Lobby for implementation budget", doc_url:"https://www.kwaleassembly.go.ke/wp-content/uploads/2024/03/KWALE-COUNTY-SEXUALGENDER-BASED_2023.pdf" },
       { id:"kw-p02", name:"Gender & Social Inclusion Policy", year:2025, status:"Draft", impl_pct:0, actors:["County Gender Office","CSOs"], gap:"Not yet adopted", advocacy:"Engage County Executive for fast-track adoption", doc_url:"https://kwale.go.ke/wp-content/uploads/2024/12/KWALE-GENDER-AND-SOCIAL-INCLUSIONPOLICY-2024-POPULAR-VERSION-DRAFT.pdf" }
     ],
-    advocacy_issues: [
-      { id:"kw-a01", problem:"No dedicated county SRHR policy", priority:1, timeline:"2 Years", lead_org:"PATH Kenya", member_orgs:["KELIN","USAID","Local CSOs"], status:"Not Started", indicator:"County SRHR Policy developed and adopted" },
-      { id:"kw-a02", problem:"Inadequate maternal health resources at facility level", priority:2, timeline:"2 Years", lead_org:"CHMT","member_orgs":["UNFPA","CSOs"], status:"Not Started", indicator:"Maternal mortality reduced by 15%" },
-      { id:"kw-a03", problem:"Harmful cultural practices including FGM and early marriage", priority:3, timeline:"3 Years", lead_org:"Kwale Women Network", member_orgs:["Council of Imams","CSOs"], status:"In Progress", indicator:"FGM prevalence reduced; early marriage cases down" },
-      { id:"kw-a04", problem:"Limited school re-entry policy for teen mothers", priority:4, timeline:"1 Year", lead_org:"KELIN","member_orgs":["Education Dept.","CSOs"], status:"Not Started", indicator:"County school re-entry policy adopted" },
-      { id:"kw-a05", problem:"Inadequate youth-friendly SRHR services", priority:5, timeline:"2 Years", lead_org:"NAYA Kwale", member_orgs:["UNFPA","CHMT"], status:"Not Started", indicator:"Youth-friendly facilities increased to 60%" }
+    advocacy_materials: [
+      { policy:"National Reproductive Health Policy (County Implementation)", theme:"Maternal Health Access, Quality of Care & Preventable Maternal Deaths", stage:"County Implementation", materials:{ decision_maker:{label:"Executive Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Kwale County SGBV Act", theme:"Gender-Based Violence (SGBV)", stage:"Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Draft Kwale County Gender & Social Inclusion Policy", theme:"Disability Inclusion in SRHR Services", stage:"Policy Development", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National School Re-entry Guidelines (2020)", theme:"School Re-entry for Adolescent Mothers", stage:"County Domestication", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Poster • Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National ASRHR Policy", theme:"Adolescent Pregnancy & Youth-Friendly SRHR Services", stage:"County Domestication", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"National Family Planning Policy", theme:"Contraceptive Access", stage:"County Implementation", materials:{ decision_maker:{label:"County Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Kenya Health Policy (2014–2030)", theme:"Post-Abortion Care (PAC)", stage:"County Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Menstrual Hygiene Management Policy", theme:"Menstrual Health & Hygiene Management", stage:"County Implementation", materials:{ decision_maker:{label:"Policy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"County Integrated Development Plan", theme:"SRHR Mainstreaming in County Planning", stage:"Implementation", materials:{ decision_maker:{label:"CIDP Advocacy Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } },
+      { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } }
     ],
     stakeholders: {
       government: ["County Department of Health","County Gender Office","CHMT","County Assembly"],
@@ -238,8 +289,10 @@ window.COUNTIES = [
 // Updates tab: fed by a public Google Form — see FORM_URL below.
 
 const GS_DEFAULTS = {
-  policies: "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
-  updates:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=841913399&single=true&output=csv"
+  policies:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
+  updates:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=841913399&single=true&output=csv",
+  // Advocacy Scorecard tab — created separately (see setup guide). Replace after publishing that tab as CSV.
+  advocacy:  "REPLACE_WITH_ADVOCACY_SCORECARD_CSV_URL"
 };
 
 // URL of the public Google Form staff use to submit a new Update.
@@ -247,6 +300,7 @@ const GS_DEFAULTS = {
 window.UPDATES_FORM_URL = "REPLACE_WITH_GOOGLE_FORM_URL";
 
 const VALID_COUNTY_IDS = new Set(['homa-bay', 'migori', 'kilifi', 'kwale']);
+const VALID_MILESTONE_IDS = new Set(window.ADVOCACY_MILESTONES.map(m => m.id));
 // Google Forms writes the exact question text as the column header.
 // Create the Updates Form with question titles matching these keys exactly.
 const UPDATES_FORM_HEADERS = {
@@ -292,8 +346,8 @@ async function fetchWithTimeout(url, ms) {
 }
 
 // In-memory store — reset on every page load, no stale data
-window.SHEET_DATA = { policies: {}, updates: {} };
-window.SHEET_STATUS = { policies: 'pending', updates: 'pending' }; // 'pending' | 'ok' | 'error'
+window.SHEET_DATA = { policies: {}, updates: {}, advocacy: {} };
+window.SHEET_STATUS = { policies: 'pending', updates: 'pending', advocacy: 'pending' }; // 'pending' | 'ok' | 'error'
 
 window.loadGoogleSheetsData = async function() {
   // ── POLICIES ── (Papa Parse handles quoting/escaping correctly; header:true reads by column name)
@@ -348,7 +402,38 @@ window.loadGoogleSheetsData = async function() {
     console.warn('⚠️ Updates sheet load failed — using base data:', e.message);
   }
 
+  // ── ADVOCACY SCORECARD ── (trusted staff edit directly, like Policies)
+  if (GS_DEFAULTS.advocacy.startsWith('http')) {
+    try {
+      const res3 = await fetchWithTimeout(GS_DEFAULTS.advocacy, 5000);
+      const text3 = await res3.text();
+      const parsed3 = Papa.parse(text3.trim(), { header: true, skipEmptyLines: true });
+      parsed3.data.forEach(row => {
+        const county_id = (row.county_id || '').trim();
+        const milestone_id = (row.milestone_id || '').trim();
+        if (!VALID_COUNTY_IDS.has(county_id) || !VALID_MILESTONE_IDS.has(milestone_id)) return;
+        if (!window.SHEET_DATA.advocacy[county_id]) window.SHEET_DATA.advocacy[county_id] = {};
+        window.SHEET_DATA.advocacy[county_id][milestone_id] = Math.max(0, Math.min(2, parseInt(row.score, 10) || 0));
+      });
+      window.SHEET_STATUS.advocacy = 'ok';
+    } catch (e) {
+      window.SHEET_STATUS.advocacy = 'error';
+      console.warn('⚠️ Advocacy scorecard sheet load failed — all milestones default to 0:', e.message);
+    }
+  } else {
+    window.SHEET_STATUS.advocacy = 'error'; // placeholder URL not yet configured
+  }
+
   console.log('Google Sheets sync:', window.SHEET_STATUS);
+};
+
+// Helper: get the advocacy scorecard for a county — all milestones default to 0 until a staff member scores them via the Sheet
+window.getAdvocacyScorecard = function(countyId) {
+  const scores = window.SHEET_DATA.advocacy[countyId] || {};
+  const milestones = window.ADVOCACY_MILESTONES.map(m => ({ ...m, score: scores[m.id] ?? 0 }));
+  const totalScore = milestones.reduce((sum, m) => sum + m.score, 0);
+  const pct = Math.round((totalScore / window.ADVOCACY_MAX_SCORE) * 100);
+  return { milestones, totalScore, maxScore: window.ADVOCACY_MAX_SCORE, pct, ratingLabel: window.advocacyRatingForPct(pct) };
 };
 
 // Helper: get a county with sheet data merged in (used by county.html and admin.html)

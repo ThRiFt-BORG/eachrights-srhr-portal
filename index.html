@@ -120,8 +120,9 @@ document.getElementById('last-updated').textContent = 'Updated: ' + SITE.last_up
 
 // Stat bar
 const sb = document.getElementById('stat-bar');
-[{num:'4',lbl:'Counties Covered'},{num:'~78',lbl:'Active CSOs Tracked'},{num:'16',lbl:'County Policies Monitored'},{num:'8',lbl:'National Frameworks'},{num:'20',lbl:'Advocacy Issues Tracked'}]
-.forEach(s => { sb.innerHTML += `<div class="stat-card"><div class="num">${s.num}</div><div class="lbl">${s.lbl}</div></div>`; });
+const billsTracked = COUNTIES.reduce((sum,c)=>sum+c.advocacy_materials.length, 0);
+[{num:'4',lbl:'Counties Covered'},{num:'~78',lbl:'Active CSOs Tracked'},{num:'16',lbl:'County Policies Monitored'},{num:'8',lbl:'National Frameworks'},{num:String(billsTracked),lbl:'Bills & Policies in Advocacy Tracker'}]
+.forEach(s => { sb.innerHTML += `<div class="stat-card"><div class="num">${esc(s.num)}</div><div class="lbl">${esc(s.lbl)}</div></div>`; });
 
 // County index
 const idx = document.getElementById('county-index');
@@ -138,7 +139,7 @@ COUNTIES.forEach(c => {
       <div class="region">${esc(c.region)} Region &nbsp;·&nbsp; Pop. ${c.population.toLocaleString()}</div>
       <div class="hero-num">${esc(hs.value)}</div>
       <div class="hero-lbl">${esc(hs.label)} <span style="font-size:12px;color:var(--ink-lt)">(national avg ${esc(hs.national_avg)})</span></div>
-      <div style="margin-top:14px;font-size:13px;color:var(--ink-lt);">${c.policies.length} policies · ${c.advocacy_issues.length} advocacy priorities</div>
+      <div style="margin-top:14px;font-size:13px;color:var(--ink-lt);">${c.policies.length} policies · ${c.advocacy_materials.length} bills tracked</div>
     </div>
     <div class="card-footer">
       <span>${esc(c.key_stats.find(s=>s.label==='Active CSOs')?.value||'?')} Active CSOs</span>

@@ -106,11 +106,6 @@ img{max-width:100%;}
 .pill-completed{background:#d4edda;color:#155724;}
 
 /* ── PRIORITY BADGE ── */
-.priority-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;background:var(--green);color:#fff;}
-.priority-1{background:var(--red);}
-.priority-2{background:var(--amber);}
-.priority-3{background:var(--gold);}
-
 /* ── UPDATES FEED ── */
 .update-item{padding:16px 0;border-bottom:1px solid var(--rule);display:flex;gap:16px;}
 .update-item:last-child{border-bottom:none;}
