@@ -96,10 +96,10 @@ window.COUNTIES = [
       { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"Social Media Cards",url:""} } }
     ],
     stakeholders: {
-      government: ["County Department of Health","County Gender Office","CHMT","County Assembly Health Committee"],
+      government: ["County Department of Health","County Department of Education and Vocational Training","County Gender Office","Homa Bay County Assembly Health Committee","Homa Bay County Office of the Attorney","Department of Economic Planning and Budget","Department of Finance and Planning"],
       csos: ["GVRC","CSA","CYAN Kenya","KELIN","NAYA","HOCEN","HOYMAS"],
       development_partners: ["UNICEF","UNFPA","USAID"],
-      community: ["Religious coordinating bodies","Youth advisory councils"]
+      community: ["Religious coordinating bodies","Traditional leaders' councils","Community health promoters' network","Youth advisory councils"]
     },
     budget_trend: [
       { fy:"2022/23", allocation_m:98.8 },
@@ -108,7 +108,7 @@ window.COUNTIES = [
     ],
     cso_strengths: ["Community mobilization","HIV-focused networking","Local context knowledge"],
     cso_gaps: ["Policy analysis","Budget tracking","Documentation","Strategic litigation"],
-    coordination: ["CHMT quarterly meetings","HIV Technical Working Group","RMNCAH committee"],
+    coordination: ["CHMT quarterly meetings","HIV Technical Working Group","Ad hoc CSO coordination meetings","RMNCAH committee"],
     updates: [
       { id:"hb-u01", date:"2026-06-01", title:"County SRHR Policy Technical Review Meeting", body:"Stakeholders convened to review the draft Homa Bay County Reproductive Health Bill. Technical review stage ongoing with inputs from CSOs and CHMT.", source:"EACHRights Field Team", tags:["policy","reproductive-health"] },
       { id:"hb-u02", date:"2026-04-15", title:"SGBV Awareness Campaign — Homa Bay Town", body:"A joint campaign by GVRC and NAYA reached over 2,000 community members across 5 sub-counties with SGBV prevention messaging.", source:"GVRC", tags:["sgbv","community"] }
@@ -155,7 +155,7 @@ window.COUNTIES = [
     stakeholders: {
       government: ["County Department of Health Services","County Department of Youth Affairs","County Department of Gender and Social Services","Migori County Assembly Health Committee"],
       csos: ["Mikeda Youth Empowerment","Dreamt Hope","Safe Engage Foundation","Youth for a Sustainable World (YSW)"],
-      development_partners: ["Plan International","PATH (Program for Appropriate Technology in Health)"],
+      development_partners: ["Youth for a Sustainable World (YSW)","Plan International","PATH (Program for Appropriate Technology in Health)"],
       community: ["Religious leaders' network","Community Health Strategy Coordinating Committee","Youth Parliamentarians' forum","Women's rights networks"]
     },
     budget_trend: [
