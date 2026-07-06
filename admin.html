@@ -73,25 +73,15 @@
   <div class="nav-links">
     <a href="index.html">← Back to Portal</a>
   </div>
-  <div class="nav-right">Admin Panel</div>
+  <div class="nav-right">Staff Dashboard</div>
 </nav>
 
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-wrap">
-    <h2>🔐 Admin Login</h2>
-    <p>Enter the admin password to access the data management panel.</p>
-    <div class="field" style="margin-bottom:16px;">
-      <label>Password</label>
-      <input type="password" id="admin-password" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
-    <button class="btn-save" onclick="doLogin()" style="width:100%;">Login</button>
-    <p style="font-size:12px;color:var(--ink-lt);margin-top:14px;text-align:center;">Default password: <strong>eachrights2026</strong><br>Change it in Settings after login.</p>
-  </div>
+<div style="max-width:900px;margin:16px auto 0;padding:0 24px;">
+  <div class="guide-note">ℹ️ This page is a read-only monitor and staff guide — it shows the same publicly-visible data as the county pages, just organized for quick review. All real edits happen in the Google Sheet or the Updates Form, not here.</div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="admin-panel" style="display:none;">
+<!-- STAFF DASHBOARD -->
+<div id="admin-panel">
 <div class="admin-layout">
 
   <div class="admin-nav">
@@ -103,7 +93,6 @@
     <a href="#" onclick="showSection('documents','this')">📎 Documents</a>
     <h3>System</h3>
     <a href="#" onclick="showSection('guide','this')">📖 How-To Guide</a>
-    <a href="#" onclick="showSection('settings','this')">⚙ Settings</a>
   </div>
 
   <div class="admin-content">
@@ -202,7 +191,7 @@
         <div class="sub">Step-by-step instructions for non-technical staff. No coding required.</div>
 
         <div class="guide-note">
-          <strong>The single rule:</strong> All data updates go through the <strong>Google Sheet</strong>. Do not try to edit any code files. Edit the sheet → portal updates automatically.
+          <strong>The single rule:</strong> Never edit code files. <strong>Policy status</strong> changes go through the Google Sheet (restricted to approved staff). <strong>Field updates/reports</strong> go through the public Updates Form — anyone on the team can submit one, no sheet access needed.
         </div>
 
         <!-- SECTION A -->
@@ -227,22 +216,11 @@
         <!-- SECTION B -->
         <div class="guide-section">
           <h3>B. How to Add a Field Update / Report</h3>
-          <div class="gs-step"><div class="num">1</div><div class="step-body">Open the Google Sheet → click the <strong>Updates</strong> tab.</div></div>
-          <div class="gs-step"><div class="num">2</div><div class="step-body">Scroll to the <strong>bottom</strong> of the existing rows and click on the first empty row.</div></div>
-          <div class="gs-step"><div class="num">3</div><div class="step-body">Fill in each column:
-            <table class="col-table" style="margin-top:8px;">
-              <thead><tr><th>Column</th><th>What to enter</th></tr></thead>
-              <tbody>
-                <tr><td><code>county_id</code></td><td>Type exactly: <code>homa-bay</code>, <code>migori</code>, <code>kilifi</code>, or <code>kwale</code></td></tr>
-                <tr><td><code>date</code></td><td>Today's date in this format: <code>2026-06-27</code></td></tr>
-                <tr><td><code>title</code></td><td>Short title e.g. "Governor signs SGBV Policy"</td></tr>
-                <tr><td><code>body</code></td><td>Full description of what happened</td></tr>
-                <tr><td><code>source</code></td><td>Your organization name e.g. "CREAW Kilifi"</td></tr>
-                <tr><td><code>tags</code></td><td>Keywords separated by semicolons e.g. <code>policy;sgbv;governor</code></td></tr>
-              </tbody>
-            </table>
-          </div></div>
-          <div class="gs-step"><div class="num">4</div><div class="step-body">Sheet saves automatically. Refresh the county page on the portal — your update appears in the Updates feed.</div></div>
+          <div class="gs-step"><div class="num">1</div><div class="step-body">Go to any county page and click <strong>"+ Add Update"</strong> (or open the form link directly — ask your supervisor if you don't have it).</div></div>
+          <div class="gs-step"><div class="num">2</div><div class="step-body">Fill in the form: County, Date of Event, Update Title, Description, Source/Organization, and optional Tags.</div></div>
+          <div class="gs-step"><div class="num">3</div><div class="step-body">Submit. The form writes directly into the Updates sheet — no manual sheet editing, no risk of typos in county names since it's a dropdown.</div></div>
+          <div class="gs-step"><div class="num">4</div><div class="step-body">Refresh the county page on the portal — your update appears in the Updates feed within seconds.</div></div>
+          <div class="guide-note">Why a form instead of direct sheet access? It keeps the sheet's edit access restricted to a small trusted group, while still letting any field staff submit updates safely.</div>
         </div>
 
         <!-- SECTION C -->
@@ -264,7 +242,7 @@
               <li>Implementation percentage (e.g. change 0% to 45%)</li>
               <li>Key gap text</li>
               <li>Document links</li>
-              <li>Field updates and reports</li>
+              <li>Field updates and reports (via the Updates Form — no sheet access needed)</li>
             </ul>
           </div>
           <div class="guide-box">
@@ -300,52 +278,15 @@
       </div>
     </div>
 
-    <!-- SETTINGS -->
-    <div class="admin-section" id="section-settings">
-      <div class="admin-card">
-        <h2>Change Admin Password</h2>
-        <div class="sub">Update the password for this admin panel.</div>
-        <div class="field-row">
-          <div class="field"><label>New Password</label><input type="password" id="new-pwd"></div>
-          <div class="field"><label>Confirm Password</label><input type="password" id="confirm-pwd"></div>
-        </div>
-        <button class="btn-save" onclick="changePassword()">Update Password</button>
-      </div>
-      <div class="admin-card">
-        <h2>Force Clear Cache</h2>
-        <div class="sub">If data looks stale or wrong, clear the local cache and reload fresh from Google Sheets.</div>
-        <button class="btn-danger" onclick="clearAndReload()">⚠ Clear Cache &amp; Reload from Sheet</button>
-      </div>
-    </div>
-
   </div>
 </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="data/counties.js"></script>
 <script>
-// ── AUTH ──
-const DEFAULT_PWD = 'eachrights2026';
-function doLogin(){
-  const pwd = document.getElementById('admin-password').value;
-  const stored = localStorage.getItem('admin_pwd') || DEFAULT_PWD;
-  if(pwd === stored){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('admin-panel').style.display='block';
-    initAdmin();
-  } else { alert('Incorrect password.'); }
-}
-function changePassword(){
-  const np = document.getElementById('new-pwd').value;
-  const cp = document.getElementById('confirm-pwd').value;
-  if(!np){ alert('Enter a password.'); return; }
-  if(np !== cp){ alert('Passwords do not match.'); return; }
-  localStorage.setItem('admin_pwd', np);
-  toast('Password updated!');
-}
-
 // ── NAV ──
 function showSection(id, el){
   document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
@@ -364,8 +305,7 @@ function toast(msg, type='success'){
 }
 
 // ── INIT ──
-function initAdmin(){
-  // Show hardcoded URLs
+async function initAdmin(){
   document.getElementById('display-policies-url').textContent = GS_DEFAULTS.policies;
   document.getElementById('display-updates-url').textContent = GS_DEFAULTS.updates;
 
@@ -383,62 +323,64 @@ function initAdmin(){
     tabs.appendChild(btn);
   });
 
+  await window.SHEET_READY;
+  updateConnectionStatus();
   renderPolicyViewer(COUNTIES[0].id);
   renderUpdatesViewer();
   renderDocsViewer();
   document.getElementById('sheet-last-loaded').textContent = 'Last loaded: ' + new Date().toLocaleTimeString();
 }
 
-// ── POLICY VIEWER (read-only, shows sheet data merged over base) ──
+function updateConnectionStatus(){
+  const ok = window.SHEET_STATUS.policies === 'ok' && window.SHEET_STATUS.updates === 'ok';
+  document.getElementById('gs-status-dot').classList.toggle('connected', ok);
+  document.getElementById('gs-status-text').textContent = ok ? 'Connected ✓' : 'Connection issue — showing baseline data';
+}
+
+// ── POLICY VIEWER (real live-merged data — same function county.html uses) ──
 function renderPolicyViewer(countyId){
-  const C = COUNTIES.find(c=>c.id===countyId);
-  const overrides = JSON.parse(localStorage.getItem('admin_'+countyId)||'{}');
+  const C = window.getMergedCounty(countyId);
+  const overriddenIds = new Set((window.SHEET_DATA.policies[countyId] || []).map(p=>p.id));
   const viewer = document.getElementById('policy-viewer');
   viewer.innerHTML = '';
   C.policies.forEach(p=>{
-    const ov = overrides.policies?.find(x=>x.id===p.id)||{};
-    const status = ov.status || p.status;
-    const impl = ov.impl_pct !== undefined ? ov.impl_pct : p.impl_pct;
-    const gap = ov.gap || p.gap;
-    const isLive = Object.keys(ov).length > 0;
-    const col = impl>=60?'#27ae60':impl>=30?'#e67e22':'#c0392b';
-    const sc = 'pill-'+status.toLowerCase().replace(/[\s\/\-]+/g,'');
+    const isLive = overriddenIds.has(p.id);
+    const col = p.impl_pct>=60?'#27ae60':p.impl_pct>=30?'#e67e22':'#c0392b';
     viewer.innerHTML += `
     <div class="policy-view-row" style="border-left-color:${isLive?'var(--green)':'var(--rule)'}">
       <div class="pname">
-        ${p.name}
+        ${esc(p.name)}
         ${isLive ? '<span class="live-badge">LIVE FROM SHEET</span>' : ''}
-        <div style="font-size:12px;color:var(--ink-lt);margin-top:3px;">${gap}</div>
+        <div style="font-size:12px;color:var(--ink-lt);margin-top:3px;">${esc(p.gap)}</div>
       </div>
       <div class="pmeta">
-        <span class="pill ${sc}">${status}</span>
+        <span class="pill ${slugStatus(p.status)}">${esc(p.status)}</span>
         <div style="display:flex;align-items:center;gap:6px;">
-          <div class="impl-bar" style="width:60px;"><div class="impl-fill" style="width:${impl}%;background:${col}"></div></div>
-          <span style="font-size:13px;font-weight:700;">${impl}%</span>
+          <div class="impl-bar" style="width:60px;"><div class="impl-fill" style="width:${p.impl_pct}%;background:${col}"></div></div>
+          <span style="font-size:13px;font-weight:700;">${p.impl_pct}%</span>
         </div>
       </div>
     </div>`;
   });
 }
 
-// ── UPDATES VIEWER ──
+// ── UPDATES VIEWER (real live-merged data, sourced from the Updates Form sheet) ──
 function renderUpdatesViewer(){
   const viewer = document.getElementById('updates-viewer');
   let all = [];
   COUNTIES.forEach(c=>{
-    const stored = JSON.parse(localStorage.getItem('updates_'+c.id)||'[]');
-    stored.forEach(u => all.push({...u, countyName:c.name}));
-    c.updates.forEach(u => { if(!stored.find(s=>s.id===u.id)) all.push({...u, countyName:c.name}); });
+    const merged = window.getMergedCounty(c.id);
+    merged.updates.forEach(u => all.push({...u, countyName:c.name}));
   });
-  all.sort((a,b)=>b.date.localeCompare(a.date));
-  if(!all.length){ viewer.innerHTML='<p style="color:var(--ink-lt);font-size:14px;">No updates found. Add rows to the Updates tab in your Google Sheet.</p>'; return; }
+  all.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(!all.length){ viewer.innerHTML='<p style="color:var(--ink-lt);font-size:14px;">No updates found yet.</p>'; return; }
   viewer.innerHTML = all.slice(0,20).map(u=>`
   <div class="update-item">
-    <div class="update-date">${u.date.slice(0,10)}<br><span style="font-size:10px;background:var(--green-lt);color:var(--green);padding:1px 5px;border-radius:3px;">${u.countyName}</span></div>
+    <div class="update-date">${esc((u.date||'').slice(0,10))}<br><span style="font-size:10px;background:var(--green-lt);color:var(--green);padding:1px 5px;border-radius:3px;">${esc(u.countyName)}</span></div>
     <div class="update-body">
-      <h4 style="font-size:14px;">${u.title}</h4>
-      <p style="font-size:13px;">${u.body}</p>
-      <div class="update-source">Source: ${u.source} &nbsp;${(u.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <h4 style="font-size:14px;">${esc(u.title)}</h4>
+      <p style="font-size:13px;">${esc(u.body)}</p>
+      <div class="update-source">Source: ${esc(u.source)} &nbsp;${(u.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
     </div>
   </div>`).join('');
 }
@@ -448,56 +390,43 @@ function renderDocsViewer(){
   const viewer = document.getElementById('docs-viewer');
   let rows = '';
   COUNTIES.forEach(c=>{
-    c.policies.filter(p=>p.doc_url).forEach(p=>{
+    const merged = window.getMergedCounty(c.id);
+    merged.policies.forEach(p=>{
+      const url = safeUrl(p.doc_url);
+      if(!url) return;
       rows += `<div style="padding:10px 0;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;font-size:13px;">
-        <div><strong>${c.name}</strong> — ${p.name}</div>
-        <a href="${p.doc_url}" target="_blank" class="doc-link">⬇ Open</a>
+        <div><strong>${esc(c.name)}</strong> — ${esc(p.name)}</div>
+        <a href="${esc(url)}" target="_blank" rel="noopener noreferrer" class="doc-link">⬇ Open</a>
       </div>`;
     });
   });
-  viewer.innerHTML = rows || '<p style="font-size:14px;color:var(--ink-lt);">No documents linked yet. Add doc_url values to the Google Sheet Policies tab.</p>';
+  viewer.innerHTML = rows || '<p style="font-size:14px;color:var(--ink-lt);">No documents linked yet.</p>';
 }
 
 // ── REFRESH ──
 async function refreshSheetData(){
   const result = document.getElementById('gs-test-result');
   result.textContent = 'Refreshing from Google Sheets...';
-  // Clear cached sheet data
-  COUNTIES.forEach(c=>{
-    const stored = JSON.parse(localStorage.getItem('admin_'+c.id)||'{}');
-    delete stored.policies;
-    localStorage.setItem('admin_'+c.id, JSON.stringify(stored));
-    // Also clear gs-prefixed updates
-    const upd = JSON.parse(localStorage.getItem('updates_'+c.id)||'[]').filter(u=>!u.id.startsWith('gs-'));
-    localStorage.setItem('updates_'+c.id, JSON.stringify(upd));
-  });
-  try {
-    await window.loadGoogleSheetsData();
-    result.innerHTML = '<span style="color:var(--green);">✅ Refreshed successfully from Google Sheets — ' + new Date().toLocaleTimeString() + '</span>';
-    document.getElementById('sheet-last-loaded').textContent = 'Last loaded: ' + new Date().toLocaleTimeString();
-    document.getElementById('gs-status-dot').classList.add('connected');
-    document.getElementById('gs-status-text').textContent = 'Connected ✓';
-    renderPolicyViewer(COUNTIES[0].id);
-    renderUpdatesViewer();
+  window.SHEET_DATA = { policies: {}, updates: {} };
+  await window.loadGoogleSheetsData();
+  updateConnectionStatus();
+  const ok = window.SHEET_STATUS.policies === 'ok' && window.SHEET_STATUS.updates === 'ok';
+  if(ok){
+    result.innerHTML = '<span style="color:var(--green);">✅ Refreshed successfully — ' + new Date().toLocaleTimeString() + '</span>';
     toast('Data refreshed from Google Sheets!');
-  } catch(e){
-    result.innerHTML = '<span style="color:var(--red);">❌ Refresh failed: ' + e.message + '</span>';
-    document.getElementById('gs-status-dot').classList.remove('connected');
-    document.getElementById('gs-status-text').textContent = 'Connection error';
+  } else {
+    result.innerHTML = '<span style="color:var(--red);">❌ Refresh failed — check internet connection</span>';
     toast('Refresh failed — check internet connection', 'warning');
   }
+  document.getElementById('sheet-last-loaded').textContent = 'Last loaded: ' + new Date().toLocaleTimeString();
+  const tabButtons = [...document.getElementById('policy-county-tabs').children];
+  const activeIdx = Math.max(0, tabButtons.findIndex(b=>b.classList.contains('active')));
+  renderPolicyViewer(COUNTIES[activeIdx].id);
+  renderUpdatesViewer();
+  renderDocsViewer();
 }
 
-// ── CLEAR CACHE ──
-function clearAndReload(){
-  if(!confirm('This will clear all cached sheet data and reload fresh from Google Sheets. Continue?')) return;
-  COUNTIES.forEach(c=>{
-    localStorage.removeItem('admin_'+c.id);
-    localStorage.removeItem('updates_'+c.id);
-  });
-  toast('Cache cleared — reloading...');
-  setTimeout(()=>location.reload(), 1000);
-}
+initAdmin();
 </script>
 </body>
 </html>

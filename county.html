@@ -104,8 +104,8 @@
     <div class="section" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Updates &amp; Reports</h2><span class="meta">Field reports and advocacy progress</span></div>
       <div id="updates-feed"></div>
-      <button class="update-add-toggle" onclick="window.open('https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=841913399&single=true&output=csv'.replace('pub?gid','edit#gid'),'_blank')">+ Add Update via Google Sheet</button>
-      <p style="font-size:13px;color:var(--ink-lt);margin-top:6px;">Opens the shared Google Sheet where you can add a new row to the Updates tab. Refresh this page after saving to see the update.</p>
+      <button class="update-add-toggle" id="add-update-btn" onclick="window.open(window.UPDATES_FORM_URL,'_blank','noopener')">+ Add Update</button>
+      <p style="font-size:13px;color:var(--ink-lt);margin-top:6px;">Opens a short form to submit a field update. It appears here automatically — refresh the page after submitting.</p>
     </div>
 
     <!-- DOCUMENTS -->
@@ -155,16 +155,30 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="data/counties.js"></script>
 <script>
 (async function() {
 const params = new URLSearchParams(location.search);
 const countyId = params.get('id')||'homa-bay';
 
-// Wait for sheet then get merged county — always falls back to base data
+// Show a lightweight sync notice while the (max 5s) sheet fetch resolves
+const syncNote = document.createElement('div');
+syncNote.className = 'status-note';
+syncNote.style.margin = '0 0 16px';
+syncNote.textContent = '⏳ Syncing latest policy status and updates…';
+document.querySelector('.county-main').prepend(syncNote);
+
+// Wait for sheet then get merged county — always falls back to base data within ~5s
 await window.SHEET_READY;
 const C = window.getMergedCounty(countyId) || window.COUNTIES && JSON.parse(JSON.stringify(COUNTIES.find(c=>c.id===countyId)));
 if(!C){document.body.innerHTML='<p style="padding:40px;">County not found. <a href="index.html">Go home</a></p>';throw 0;}
+
+if (window.SHEET_STATUS.policies === 'error' && window.SHEET_STATUS.updates === 'error') {
+  syncNote.textContent = '⚠️ Could not reach live data — showing last-published baseline.';
+} else {
+  syncNote.remove();
+}
 
 document.title = `${C.name} County — EACHRights SRHR Portal`;
 document.getElementById('nav-county-name').textContent = C.name+' County';
@@ -182,7 +196,7 @@ document.getElementById('hero-women').textContent = C.women_reproductive_age?.to
 // Stat bar
 const sb = document.getElementById('county-stat-bar');
 C.key_stats.forEach(s => {
-  sb.innerHTML += `<div class="stat-card"><div class="num" style="font-size:22px;">${s.value}</div><div class="lbl">${s.label}${s.benchmark?'<br><span style="font-size:10px;opacity:.7">'+s.benchmark+'</span>':''}</div></div>`;
+  sb.innerHTML += `<div class="stat-card"><div class="num" style="font-size:22px;">${esc(s.value)}</div><div class="lbl">${esc(s.label)}${s.benchmark?'<br><span style="font-size:10px;opacity:.7">'+esc(s.benchmark)+'</span>':''}</div></div>`;
 });
 
 // County map — polygon + locked zoom
@@ -221,15 +235,15 @@ document.getElementById('policy-count').textContent = `${C.policies.length} poli
 const pb = document.getElementById('policy-tbody');
 C.policies.forEach(p => {
   const col = p.impl_pct>=60?'#27ae60':p.impl_pct>=30?'#e67e22':'#c0392b';
-  const sc = 'pill-'+p.status.toLowerCase().replace(/[\s\/\-]+/g,'');
+  const safeDoc = safeUrl(p.doc_url);
   pb.innerHTML += `<tr>
-    <td><strong style="font-size:14px;">${p.name}</strong></td>
-    <td style="font-size:13px;">${p.year}</td>
-    <td><span class="pill ${sc}">${p.status}</span></td>
+    <td><strong style="font-size:14px;">${esc(p.name)}</strong></td>
+    <td style="font-size:13px;">${esc(p.year)}</td>
+    <td><span class="pill ${slugStatus(p.status)}">${esc(p.status)}</span></td>
     <td><div style="display:flex;align-items:center;gap:6px;"><div class="impl-bar" style="width:70px;"><div class="impl-fill" style="width:${p.impl_pct}%;background:${col}"></div></div><span style="font-size:13px;font-weight:700;">${p.impl_pct}%</span></div></td>
-    <td style="font-size:13px;color:var(--ink-mid);max-width:180px;">${p.gap}</td>
-    <td style="font-size:13px;color:var(--green-dk);max-width:180px;">${p.advocacy}</td>
-    <td>${p.doc_url?`<a class="doc-link" href="${p.doc_url}" target="_blank">⬇</a>`:'—'}</td>
+    <td style="font-size:13px;color:var(--ink-mid);max-width:180px;">${esc(p.gap)}</td>
+    <td style="font-size:13px;color:var(--green-dk);max-width:180px;">${esc(p.advocacy)}</td>
+    <td>${safeDoc?`<a class="doc-link" href="${esc(safeDoc)}" target="_blank" rel="noopener noreferrer">⬇</a>`:'—'}</td>
   </tr>`;
 });
 
@@ -237,43 +251,42 @@ C.policies.forEach(p => {
 document.getElementById('adv-count').textContent = `${C.advocacy_issues.length} priorities`;
 const ab = document.getElementById('advocacy-tbody');
 C.advocacy_issues.forEach(a => {
-  const sc = 'pill-'+a.status.toLowerCase().replace(/\s+/g,'');
   ab.innerHTML += `<tr>
-    <td><span class="priority-badge priority-${a.priority}">${a.priority}</span></td>
-    <td><strong style="font-size:14px;">${a.problem}</strong><br><span style="font-size:12px;color:var(--ink-lt);">Partners: ${a.member_orgs?.join(', ')}</span></td>
-    <td style="font-size:13px;">${a.lead_org}</td>
-    <td style="font-size:13px;white-space:nowrap;">${a.timeline}</td>
-    <td><span class="pill ${sc}">${a.status}</span></td>
-    <td style="font-size:13px;color:var(--ink-mid);">${a.indicator}</td>
+    <td><span class="priority-badge priority-${esc(a.priority)}">${esc(a.priority)}</span></td>
+    <td><strong style="font-size:14px;">${esc(a.problem)}</strong><br><span style="font-size:12px;color:var(--ink-lt);">Partners: ${esc(a.member_orgs?.join(', '))}</span></td>
+    <td style="font-size:13px;">${esc(a.lead_org)}</td>
+    <td style="font-size:13px;white-space:nowrap;">${esc(a.timeline)}</td>
+    <td><span class="pill ${slugStatus(a.status)}">${esc(a.status)}</span></td>
+    <td style="font-size:13px;color:var(--ink-mid);">${esc(a.indicator)}</td>
   </tr>`;
 });
 
-// Updates — from merged county data (sheet + base)
+// Updates — from merged county data (Form-fed sheet + base)
 const feed = document.getElementById('updates-feed');
 function renderUpdates(arr){
-  feed.innerHTML = arr.length?'':'<p style="color:var(--ink-lt);font-size:14px;">No updates yet. Add rows to the Google Sheet Updates tab.</p>';
+  feed.innerHTML = arr.length?'':'<p style="color:var(--ink-lt);font-size:14px;">No updates yet. Use the "+ Add Update" button below.</p>';
   arr.forEach(u=>{
-    const tags=(u.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
-    feed.innerHTML+=`<div class="update-item"><div class="update-date">${u.date.slice(0,10)}</div><div class="update-body"><h4 style="font-size:15px;">${u.title}</h4><p style="font-size:14px;">${u.body}</p><div class="update-source">Source: ${u.source} &nbsp;${tags}</div></div></div>`;
+    const tags=(u.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+    feed.innerHTML+=`<div class="update-item"><div class="update-date">${esc((u.date||'').slice(0,10))}</div><div class="update-body"><h4 style="font-size:15px;">${esc(u.title)}</h4><p style="font-size:14px;">${esc(u.body)}</p><div class="update-source">Source: ${esc(u.source)} &nbsp;${tags}</div></div></div>`;
   });
 }
 renderUpdates(C.updates);
 
 // Key stats
 const ks=document.getElementById('key-stats');
-C.key_stats.forEach(s=>{ks.innerHTML+=`<div class="side-stat ${s.status||''}"><div><div style="font-size:13px;color:var(--ink-mid);">${s.label}</div>${s.benchmark?`<div class="bm">${s.benchmark}</div>`:''}</div><div class="val">${s.value}</div></div>`;});
+C.key_stats.forEach(s=>{ks.innerHTML+=`<div class="side-stat ${esc(s.status||'')}"><div><div style="font-size:13px;color:var(--ink-mid);">${esc(s.label)}</div>${s.benchmark?`<div class="bm">${esc(s.benchmark)}</div>`:''}</div><div class="val">${esc(s.value)}</div></div>`;});
 
 // Stakeholders
 const sk=document.getElementById('stakeholders');
 [['government','🏛 Government'],['csos','🤝 Civil Society'],['development_partners','🌍 Dev. Partners'],['community','👥 Community']].forEach(([key,lbl])=>{
   if(!C.stakeholders[key]?.length)return;
-  sk.innerHTML+=`<div class="stakeholder-group"><h4>${lbl}</h4><div class="stakeholder-tags">${C.stakeholders[key].map(s=>`<span class="stk-tag">${s}</span>`).join('')}</div></div>`;
+  sk.innerHTML+=`<div class="stakeholder-group"><h4>${lbl}</h4><div class="stakeholder-tags">${C.stakeholders[key].map(s=>`<span class="stk-tag">${esc(s)}</span>`).join('')}</div></div>`;
 });
 
 // CSO capacity
-document.getElementById('cso-strengths').innerHTML = C.cso_strengths.map(s=>`<div class="cap-item str">${s}</div>`).join('');
-document.getElementById('cso-gaps').innerHTML = C.cso_gaps.map(g=>`<div class="cap-item gap">${g}</div>`).join('');
-document.getElementById('coordination').innerHTML = C.coordination.map(c=>`<div style="font-size:13px;color:var(--ink-mid);padding:3px 0;border-bottom:1px solid var(--rule);">• ${c}</div>`).join('');
+document.getElementById('cso-strengths').innerHTML = C.cso_strengths.map(s=>`<div class="cap-item str">${esc(s)}</div>`).join('');
+document.getElementById('cso-gaps').innerHTML = C.cso_gaps.map(g=>`<div class="cap-item gap">${esc(g)}</div>`).join('');
+document.getElementById('coordination').innerHTML = C.coordination.map(c=>`<div style="font-size:13px;color:var(--ink-mid);padding:3px 0;border-bottom:1px solid var(--rule);">• ${esc(c)}</div>`).join('');
 
 // Charts
 new Chart(document.getElementById('budget-chart'),{
@@ -292,9 +305,9 @@ new Chart(document.getElementById('impl-chart'),{
 
 // Docs
 const dl=document.getElementById('docs-list');
-const hasDocs=C.policies.some(p=>p.doc_url);
-if(hasDocs){C.policies.filter(p=>p.doc_url).forEach(p=>{dl.innerHTML+=`<div style="padding:8px 0;border-bottom:1px solid var(--rule);font-size:14px;display:flex;justify-content:space-between;align-items:center;"><span>${p.name}</span><a class="doc-link" href="${p.doc_url}" target="_blank">⬇ Download</a></div>`;}); }
-else{dl.innerHTML='<p style="font-size:14px;color:var(--ink-lt);">No documents attached yet. Use Admin Panel to add document links.</p>';}
+const docsWithUrls = C.policies.map(p=>({name:p.name, url:safeUrl(p.doc_url)})).filter(p=>p.url);
+if(docsWithUrls.length){docsWithUrls.forEach(p=>{dl.innerHTML+=`<div style="padding:8px 0;border-bottom:1px solid var(--rule);font-size:14px;display:flex;justify-content:space-between;align-items:center;"><span>${esc(p.name)}</span><a class="doc-link" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">⬇ Download</a></div>`;}); }
+else{dl.innerHTML='<p style="font-size:14px;color:var(--ink-lt);">No documents attached yet.</p>';}
 })();
 </script>
 </body>

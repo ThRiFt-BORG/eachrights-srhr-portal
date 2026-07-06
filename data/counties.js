@@ -234,59 +234,124 @@ window.COUNTIES = [
 // Data is fetched fresh from Google Sheets on every page load.
 // Stored in memory only (window.SHEET_DATA) — no localStorage conflicts.
 // county.html merges sheet data over base COUNTIES data before rendering.
+// Policies tab: edited directly by trusted staff (see admin.html guide).
+// Updates tab: fed by a public Google Form — see FORM_URL below.
 
 const GS_DEFAULTS = {
   policies: "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
   updates:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=841913399&single=true&output=csv"
 };
 
+// URL of the public Google Form staff use to submit a new Update.
+// Replace the placeholder after creating the Form (see setup guide).
+window.UPDATES_FORM_URL = "REPLACE_WITH_GOOGLE_FORM_URL";
+
+const VALID_COUNTY_IDS = new Set(['homa-bay', 'migori', 'kilifi', 'kwale']);
+// Google Forms writes the exact question text as the column header.
+// Create the Updates Form with question titles matching these keys exactly.
+const UPDATES_FORM_HEADERS = {
+  county: 'County',
+  date: 'Date of Event',
+  title: 'Update Title',
+  body: 'Description',
+  source: 'Source / Organization',
+  tags: 'Tags (optional, separate with ;)'
+};
+const COUNTY_LABEL_TO_ID = { 'Homa Bay': 'homa-bay', 'Migori': 'migori', 'Kilifi': 'kilifi', 'Kwale': 'kwale' };
+
+// ── XSS-SAFE RENDER HELPERS — use these around every value written via innerHTML ──
+window.esc = function(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+};
+// Only allow http(s) URLs through to href/src attributes — blocks javascript: injection via doc_url
+window.safeUrl = function(url) {
+  if (typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  return /^https?:\/\//i.test(trimmed) ? trimmed : '';
+};
+// One shared status→CSS-class slug, used by index.html, county.html, admin.html
+window.slugStatus = function(status) {
+  return 'pill-' + String(status ?? '').toLowerCase().replace(/[\s\/\-]+/g, '');
+};
+
+function clampPct(n) {
+  const v = parseInt(n, 10);
+  if (isNaN(v)) return 0;
+  return Math.max(0, Math.min(100, v));
+}
+
+// fetch with a hard timeout so a hung network doesn't block rendering forever
+async function fetchWithTimeout(url, ms) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try {
+    return await fetch(url, { signal: ctrl.signal });
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 // In-memory store — reset on every page load, no stale data
 window.SHEET_DATA = { policies: {}, updates: {} };
+window.SHEET_STATUS = { policies: 'pending', updates: 'pending' }; // 'pending' | 'ok' | 'error'
 
 window.loadGoogleSheetsData = async function() {
+  // ── POLICIES ── (Papa Parse handles quoting/escaping correctly; header:true reads by column name)
   try {
-    // ── POLICIES ──
-    const res = await fetch(GS_DEFAULTS.policies);
+    const res = await fetchWithTimeout(GS_DEFAULTS.policies, 5000);
     const text = await res.text();
-    const rows = text.trim().split('\n').slice(1);
-    rows.forEach(row => {
-      // Handle commas inside quoted fields
-      const cols = row.match(/(".*?"|[^,]+)(?=,|$)/g) || row.split(',');
-      const [county_id, policy_id, status, impl_pct, gap, doc_url] = cols.map(s => s.trim().replace(/^"|"$/g,''));
-      if (!county_id || !policy_id) return;
+    const parsed = Papa.parse(text.trim(), { header: true, skipEmptyLines: true });
+    parsed.data.forEach(row => {
+      const county_id = (row.county_id || '').trim();
+      const policy_id = (row.policy_id || '').trim();
+      if (!VALID_COUNTY_IDS.has(county_id) || !policy_id) return; // silently drop malformed/unknown rows
       if (!window.SHEET_DATA.policies[county_id]) window.SHEET_DATA.policies[county_id] = [];
       window.SHEET_DATA.policies[county_id].push({
         id: policy_id,
-        status: status || '',
-        impl_pct: parseInt(impl_pct) || 0,
-        gap: gap || '',
-        doc_url: doc_url || ''
+        status: (row.status || '').trim(),
+        impl_pct: clampPct(row.impl_pct),
+        gap: (row.gap || '').trim(),
+        doc_url: window.safeUrl(row.doc_url || '')
       });
     });
+    window.SHEET_STATUS.policies = 'ok';
+  } catch (e) {
+    window.SHEET_STATUS.policies = 'error';
+    console.warn('⚠️ Policies sheet load failed — using base data:', e.message);
+  }
 
-    // ── UPDATES ──
-    const res2 = await fetch(GS_DEFAULTS.updates);
+  // ── UPDATES ── (fed by the public Google Form; county comes through as a label, mapped to id)
+  try {
+    const res2 = await fetchWithTimeout(GS_DEFAULTS.updates, 5000);
     const text2 = await res2.text();
-    const rows2 = text2.trim().split('\n').slice(1);
-    rows2.forEach(row => {
-      const cols = row.match(/(".*?"|[^,]+)(?=,|$)/g) || row.split(',');
-      const [county_id, date, title, body, source, tags] = cols.map(s => s.trim().replace(/^"|"$/g,''));
+    const parsed2 = Papa.parse(text2.trim(), { header: true, skipEmptyLines: true });
+    parsed2.data.forEach(row => {
+      const rawCounty = (row[UPDATES_FORM_HEADERS.county] || '').trim();
+      const county_id = VALID_COUNTY_IDS.has(rawCounty) ? rawCounty : COUNTY_LABEL_TO_ID[rawCounty];
+      const title = (row[UPDATES_FORM_HEADERS.title] || '').trim();
       if (!county_id || !title) return;
+      const date = (row[UPDATES_FORM_HEADERS.date] || '').trim();
+      const tagsRaw = (row[UPDATES_FORM_HEADERS.tags] || '').trim();
       if (!window.SHEET_DATA.updates[county_id]) window.SHEET_DATA.updates[county_id] = [];
       window.SHEET_DATA.updates[county_id].push({
-        id: `gs-${county_id}-${date}-${(title||'').slice(0,8).replace(/\s/g,'')}`,
-        date, title, body: body||'', source: source||'',
-        tags: tags ? tags.split(';').map(t=>t.trim()).filter(Boolean) : []
+        id: `gs-${county_id}-${date}-${title.slice(0, 8).replace(/\s/g, '')}`,
+        date,
+        title,
+        body: (row[UPDATES_FORM_HEADERS.body] || '').trim(),
+        source: (row[UPDATES_FORM_HEADERS.source] || '').trim(),
+        tags: tagsRaw ? tagsRaw.split(';').map(t => t.trim()).filter(Boolean) : []
       });
     });
-
-    console.log('✅ Google Sheets loaded:', Object.keys(window.SHEET_DATA.policies).length, 'counties with policy data');
-  } catch(e) {
-    console.warn('⚠️ Google Sheets load failed — using base data:', e.message);
+    window.SHEET_STATUS.updates = 'ok';
+  } catch (e) {
+    window.SHEET_STATUS.updates = 'error';
+    console.warn('⚠️ Updates sheet load failed — using base data:', e.message);
   }
+
+  console.log('Google Sheets sync:', window.SHEET_STATUS);
 };
 
-// Helper: get a county with sheet data merged in (used by county.html)
+// Helper: get a county with sheet data merged in (used by county.html and admin.html)
 window.getMergedCounty = function(countyId) {
   const found = COUNTIES.find(c => c.id === countyId);
   if (!found) return null;

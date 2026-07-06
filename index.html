@@ -110,6 +110,7 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="data/counties.js"></script>
 <script>
 document.getElementById('hero-tagline').textContent = SITE.tagline;
@@ -124,23 +125,23 @@ const sb = document.getElementById('stat-bar');
 
 // County index
 const idx = document.getElementById('county-index');
-COUNTIES.forEach(c => { idx.innerHTML += `<a href="county.html?id=${c.id}">📍 ${c.name}</a>`; });
+COUNTIES.forEach(c => { idx.innerHTML += `<a href="county.html?id=${encodeURIComponent(c.id)}">📍 ${esc(c.name)}</a>`; });
 
 // County cards
 const cards = document.getElementById('county-cards');
 COUNTIES.forEach(c => {
   const hs = c.hero_stat;
-  cards.innerHTML += `<div class="county-card" onclick="window.location='county.html?id=${c.id}'">
-    <div class="card-header" style="background:${c.color};height:10px;"></div>
+  cards.innerHTML += `<div class="county-card" onclick="window.location='county.html?id=${encodeURIComponent(c.id)}'">
+    <div class="card-header" style="background:${esc(c.color)};height:10px;"></div>
     <div class="card-body">
-      <h3>${c.name}</h3>
-      <div class="region">${c.region} Region &nbsp;·&nbsp; Pop. ${c.population.toLocaleString()}</div>
-      <div class="hero-num">${hs.value}</div>
-      <div class="hero-lbl">${hs.label} <span style="font-size:12px;color:var(--ink-lt)">(national avg ${hs.national_avg})</span></div>
+      <h3>${esc(c.name)}</h3>
+      <div class="region">${esc(c.region)} Region &nbsp;·&nbsp; Pop. ${c.population.toLocaleString()}</div>
+      <div class="hero-num">${esc(hs.value)}</div>
+      <div class="hero-lbl">${esc(hs.label)} <span style="font-size:12px;color:var(--ink-lt)">(national avg ${esc(hs.national_avg)})</span></div>
       <div style="margin-top:14px;font-size:13px;color:var(--ink-lt);">${c.policies.length} policies · ${c.advocacy_issues.length} advocacy priorities</div>
     </div>
     <div class="card-footer">
-      <span>${c.key_stats.find(s=>s.label==='Active CSOs')?.value||'?'} Active CSOs</span>
+      <span>${esc(c.key_stats.find(s=>s.label==='Active CSOs')?.value||'?')} Active CSOs</span>
       <span class="arrow">→</span>
     </div>
   </div>`;
@@ -150,14 +151,15 @@ COUNTIES.forEach(c => {
 const tbody = document.getElementById('national-tbody');
 NATIONAL_POLICIES.forEach((p,i) => {
   const color = p.impl_pct>=60?'#27ae60':p.impl_pct>=40?'#e67e22':'#c0392b';
-  const doc = p.doc_url?`<a class="doc-link" href="${p.doc_url}" target="_blank">⬇ Download</a>`:'<span style="color:var(--ink-lt);font-size:12px;">—</span>';
+  const safeDoc = safeUrl(p.doc_url);
+  const doc = safeDoc?`<a class="doc-link" href="${esc(safeDoc)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`:'<span style="color:var(--ink-lt);font-size:12px;">—</span>';
   tbody.innerHTML += `<tr>
     <td style="color:var(--ink-lt);font-size:13px;">${i+1}</td>
-    <td><strong style="font-size:14px;">${p.name}</strong></td>
-    <td><span class="np-category">${p.category}</span></td>
-    <td><span class="pill pill-${p.status.toLowerCase().replace(/[\s\/]/g,'')}">${p.status}</span></td>
+    <td><strong style="font-size:14px;">${esc(p.name)}</strong></td>
+    <td><span class="np-category">${esc(p.category)}</span></td>
+    <td><span class="pill ${slugStatus(p.status)}">${esc(p.status)}</span></td>
     <td><div style="display:flex;align-items:center;gap:8px;"><div class="impl-bar" style="width:90px;"><div class="impl-fill" style="width:${p.impl_pct}%;background:${color};"></div></div><span style="font-size:13px;font-weight:600;">${p.impl_pct}%</span></div></td>
-    <td style="font-size:13px;color:var(--ink-mid);max-width:220px;">${p.gap}</td>
+    <td style="font-size:13px;color:var(--ink-mid);max-width:220px;">${esc(p.gap)}</td>
     <td>${doc}</td>
   </tr>`;
 });
@@ -183,7 +185,7 @@ fetch('data/counties.geojson')
       onEachFeature: (feat, layer) => {
         const c = countyDataMap[feat.properties.id];
         if(!c) return;
-        layer.bindTooltip(`<strong>${c.name}</strong><br>${c.hero_stat.label}: <b>${c.hero_stat.value}</b>`, {sticky:true});
+        layer.bindTooltip(`<strong>${esc(c.name)}</strong><br>${esc(c.hero_stat.label)}: <b>${esc(c.hero_stat.value)}</b>`, {sticky:true});
         layer.on('click', () => window.location='county.html?id='+c.id);
         layer.on('mouseover', function(){ this.setStyle({fillOpacity:0.75, weight:3}); });
         layer.on('mouseout', function(){ this.setStyle({fillOpacity:0.45, weight:2}); });
@@ -194,7 +196,7 @@ fetch('data/counties.geojson')
 // Legend
 const legend = document.getElementById('map-legend');
 COUNTIES.forEach(c => {
-  legend.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${c.color};opacity:.7;"></div><span>${c.name} County</span></div>`;
+  legend.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${esc(c.color)};opacity:.7;"></div><span>${esc(c.name)} County</span></div>`;
 });
 </script>
 </body>
