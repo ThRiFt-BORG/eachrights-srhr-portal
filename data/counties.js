@@ -291,8 +291,7 @@ window.COUNTIES = [
 const GS_DEFAULTS = {
   policies:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
   updates:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=1369410892&single=true&output=csv",
-  // Advocacy Scorecard tab — created separately (see setup guide). Replace after publishing that tab as CSV.
-  advocacy:  "REPLACE_WITH_ADVOCACY_SCORECARD_CSV_URL"
+  advocacy:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=1539470058&single=true&output=csv"
 };
 
 // URL of the public Google Form staff use to submit a new Update.
