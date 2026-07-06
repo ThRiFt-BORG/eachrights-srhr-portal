@@ -290,26 +290,26 @@ window.COUNTIES = [
 
 const GS_DEFAULTS = {
   policies:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
-  updates:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=841913399&single=true&output=csv",
+  updates:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=1369410892&single=true&output=csv",
   // Advocacy Scorecard tab — created separately (see setup guide). Replace after publishing that tab as CSV.
   advocacy:  "REPLACE_WITH_ADVOCACY_SCORECARD_CSV_URL"
 };
 
 // URL of the public Google Form staff use to submit a new Update.
-// Replace the placeholder after creating the Form (see setup guide).
+// Replace the placeholder once you have the Form's public /viewform URL.
 window.UPDATES_FORM_URL = "REPLACE_WITH_GOOGLE_FORM_URL";
 
 const VALID_COUNTY_IDS = new Set(['homa-bay', 'migori', 'kilifi', 'kwale']);
 const VALID_MILESTONE_IDS = new Set(window.ADVOCACY_MILESTONES.map(m => m.id));
-// Google Forms writes the exact question text as the column header.
-// Create the Updates Form with question titles matching these keys exactly.
+// Google Forms writes the exact question text as the column header — these match
+// the actual "Form Responses 1" tab headers (Timestamp column is ignored).
 const UPDATES_FORM_HEADERS = {
   county: 'County',
-  date: 'Date of Event',
+  date: 'Date Event',
   title: 'Update Title',
   body: 'Description',
-  source: 'Source / Organization',
-  tags: 'Tags (optional, separate with ;)'
+  source: 'Source/ Organization',
+  tags: 'Tags( optional, separate with ;  )'
 };
 const COUNTY_LABEL_TO_ID = { 'Homa Bay': 'homa-bay', 'Migori': 'migori', 'Kilifi': 'kilifi', 'Kwale': 'kwale' };
 
