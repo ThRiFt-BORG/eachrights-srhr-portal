@@ -296,8 +296,7 @@ const GS_DEFAULTS = {
 };
 
 // URL of the public Google Form staff use to submit a new Update.
-// Replace the placeholder once you have the Form's public /viewform URL.
-window.UPDATES_FORM_URL = "REPLACE_WITH_GOOGLE_FORM_URL";
+window.UPDATES_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSc1QzUfbPAhX3j0ZWK7QJflkBdjcywsXPCtAtjLOljk0TFXeA/viewform";
 
 const VALID_COUNTY_IDS = new Set(['homa-bay', 'migori', 'kilifi', 'kwale']);
 const VALID_MILESTONE_IDS = new Set(window.ADVOCACY_MILESTONES.map(m => m.id));
