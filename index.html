@@ -121,7 +121,8 @@ document.getElementById('last-updated').textContent = 'Updated: ' + SITE.last_up
 // Stat bar
 const sb = document.getElementById('stat-bar');
 const billsTracked = COUNTIES.reduce((sum,c)=>sum+c.advocacy_materials.length, 0);
-[{num:'4',lbl:'Counties Covered'},{num:'~78',lbl:'Active CSOs Tracked'},{num:'16',lbl:'County Policies Monitored'},{num:'8',lbl:'National Frameworks'},{num:String(billsTracked),lbl:'Bills & Policies in Advocacy Tracker'}]
+const countyPoliciesTracked = COUNTIES.reduce((sum,c)=>sum+c.policies.length, 0);
+[{num:'4',lbl:'Counties Covered'},{num:'~78',lbl:'Active CSOs Tracked'},{num:String(countyPoliciesTracked),lbl:'County Policies Monitored'},{num:'8',lbl:'National Frameworks'},{num:String(billsTracked),lbl:'Bills & Policies in Advocacy Tracker'}]
 .forEach(s => { sb.innerHTML += `<div class="stat-card"><div class="num">${esc(s.num)}</div><div class="lbl">${esc(s.lbl)}</div></div>`; });
 
 // County index
