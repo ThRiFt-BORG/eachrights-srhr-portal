@@ -177,14 +177,16 @@ footer a{color:var(--gold);}
 
 /* ── PRINT STYLES ── */
 @media print {
-  .top-nav,.nav-links,.add-update-panel,.btn,.breadcrumb,.chart-wrap canvas{display:none!important;}
-  body{background:#fff;font-size:12px;}
+  .top-nav,.nav-links,.add-update-panel,.btn,.breadcrumb,.no-print{display:none!important;}
+  body{background:#fff;font-size:11px;}
   .county-layout{grid-template-columns:1fr;padding:0;}
-  .county-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .policy-table,.advocacy-table{font-size:11px;}
-  .hero-band{background:var(--sidebar)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .county-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .policy-table,.materials-table{font-size:10px;}
+  .section{padding:8px 0!important;}
+  .hero-band{background:var(--sidebar)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:16px 20px!important;}
   .stat-bar{background:var(--green)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  @page{margin:15mm;size:A4;}
+  .scorecard-summary{box-shadow:none!important;border:1px solid var(--rule);padding:10px 14px!important;}
+  @page{margin:12mm;size:A4;}
 }
 
 /* ── RESPONSIVE ── */

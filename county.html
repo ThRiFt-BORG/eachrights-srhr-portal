@@ -94,7 +94,7 @@
   <div class="county-main">
 
     <!-- MAP -->
-    <div id="county-map" style="height:300px;border-radius:8px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:24px;"></div>
+    <div id="county-map" class="no-print" style="height:300px;border-radius:8px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:24px;"></div>
 
     <!-- POLICIES -->
     <div class="section" style="padding:0 0 28px;">
@@ -113,12 +113,12 @@
       <div class="section-hd" style="padding:0 20px 10px;"><h2>Advocacy Progress Scorecard</h2><span class="meta" id="adv-count"></span></div>
       <div style="padding:0 20px;">
         <div class="scorecard-summary" id="scorecard-summary"></div>
-        <div id="scorecard-stages"></div>
+        <div id="scorecard-stages" class="no-print"></div>
       </div>
     </div>
 
     <!-- ADVOCACY MATERIALS -->
-    <div class="section" style="padding:0 0 28px;">
+    <div class="section no-print" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Advocacy Materials Tracker</h2><span class="meta" id="materials-count"></span></div>
       <div style="overflow-x:auto;">
         <table class="materials-table">
@@ -129,7 +129,7 @@
     </div>
 
     <!-- UPDATES -->
-    <div class="section" style="padding:0 0 28px;">
+    <div class="section no-print" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Updates &amp; Reports</h2><span class="meta">Field reports and advocacy progress</span></div>
       <div id="updates-feed"></div>
       <button class="update-add-toggle" id="add-update-btn" onclick="window.open(window.UPDATES_FORM_URL,'_blank','noopener')">+ Add Update</button>
@@ -137,7 +137,7 @@
     </div>
 
     <!-- DOCUMENTS -->
-    <div class="section section-gold" style="padding:24px;border-radius:8px;margin-bottom:24px;">
+    <div class="section section-gold no-print" style="padding:24px;border-radius:8px;margin-bottom:24px;">
       <div class="section-hd"><h2>Documents</h2><span class="meta">Policy documents and reports</span></div>
       <div id="docs-list"></div>
       <p style="font-size:13px;color:var(--ink-mid);margin-top:10px;">To attach documents, go to <a href="admin.html" style="color:var(--green);font-weight:600;">Admin Panel → Documents</a>.</p>
@@ -151,11 +151,11 @@
       <h3>Key Health Indicators</h3>
       <div id="key-stats"></div>
     </div>
-    <div class="chart-wrap">
+    <div class="chart-wrap no-print">
       <h3>SRHR Budget Trend (KShs M)</h3>
       <canvas id="budget-chart"></canvas>
     </div>
-    <div class="chart-wrap">
+    <div class="chart-wrap no-print">
       <h3>Policy Implementation</h3>
       <canvas id="impl-chart"></canvas>
     </div>
@@ -163,16 +163,16 @@
       <h3>Key Stakeholders</h3>
       <div id="stakeholders"></div>
     </div>
-    <div class="side-card">
+    <div class="side-card no-print">
       <h3>CSO Capacity</h3>
       <div class="capacity-grid">
         <div class="cap-box strengths"><h4>Strengths</h4><div id="cso-strengths"></div></div>
         <div class="cap-box gaps"><h4>Gaps</h4><div id="cso-gaps"></div></div>
       </div>
-      <div style="margin-top:12px;">
-        <h4 style="font-size:12px;color:var(--ink-lt);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Coordination</h4>
-        <div id="coordination"></div>
-      </div>
+    </div>
+    <div class="side-card">
+      <h3>Coordination</h3>
+      <div id="coordination"></div>
     </div>
   </div>
 </div>

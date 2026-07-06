@@ -66,6 +66,7 @@ window.COUNTIES = [
     key_stats: [
       { label: "Maternal Mortality", value: "516/100k", benchmark: "355 national avg", status: "above" },
       { label: "Under-5 Mortality", value: "61/1,000", benchmark: "41 national avg", status: "above" },
+      { label: "HIV Prevalence", value: "~20%", benchmark: "5.6% national avg", status: "above" },
       { label: "SRHR Budget FY24/25", value: "KShs 117.4M", benchmark: "5.1% of health budget", status: "neutral" },
       { label: "Active CSOs", value: "~25", benchmark: "", status: "neutral" }
     ],
@@ -152,10 +153,10 @@ window.COUNTIES = [
       { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } }
     ],
     stakeholders: {
-      government: ["County Department of Health","County Gender Office","County Assembly","CHMT"],
-      csos: ["KELIN","FIDA Kenya","NAYA","YSW","AMID","Ripple Effect","CYAN Kenya"],
-      development_partners: ["UNFPA","USAID","WHO"],
-      community: ["Council of Elders","Youth groups","Faith communities"]
+      government: ["County Department of Health Services","County Department of Youth Affairs","County Department of Gender and Social Services","Migori County Assembly Health Committee"],
+      csos: ["Mikeda Youth Empowerment","Dreamt Hope","Safe Engage Foundation","Youth for a Sustainable World (YSW)"],
+      development_partners: ["Plan International","PATH (Program for Appropriate Technology in Health)"],
+      community: ["Religious leaders' network","Community Health Strategy Coordinating Committee","Youth Parliamentarians' forum","Women's rights networks"]
     },
     budget_trend: [
       { fy:"2022/23", allocation_m:85.2 },
@@ -164,7 +165,7 @@ window.COUNTIES = [
     ],
     cso_strengths: ["Strong community networks","FGM elimination advocacy","HIV programming experience"],
     cso_gaps: ["Legislative advocacy","Budget analysis","Monitoring & evaluation","Coalition building"],
-    coordination: ["HIV/AIDS Coordinating Committee","SGBV Technical Working Group","CSO Forum"],
+    coordination: ["County Reproductive Health Technical Working Group","Gender Technical Working Group","Informal CSO coordination meetings","County HIV Committee"],
     updates: [
       { id:"mg-u01", date:"2026-05-20", title:"Reproductive Health Bill Lobbying Campaign", body:"EACHRights and KELIN convened a legislative engagement session with 12 MCAs to push for tabling of the stalled Reproductive Health Bill.", source:"EACHRights Field Team", tags:["policy","bill","legislature"] },
       { id:"mg-u02", date:"2026-03-08", title:"International Women's Day SGBV Forum", body:"Joint forum held in Migori town on IWD, attended by 150 stakeholders, focused on operationalizing the 2019 SGBV Policy.", source:"KELIN Migori", tags:["sgbv","forum"] }
@@ -209,10 +210,10 @@ window.COUNTIES = [
       { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } }
     ],
     stakeholders: {
-      government: ["CDH","CHMT","County Gender Office","County Assembly","Governor's Office"],
-      csos: ["CREAW","PATH Kenya","Kilifi Youth Network","AMKENI Women","KELIN","FIDA Kenya"],
-      development_partners: ["UNFPA","UNICEF","WHO"],
-      community: ["Beach Management Units","Youth groups","Women's groups"]
+      government: ["County Department of Health Services","County Department of Education","County Department of Gender and Social Services","Kilifi County Assembly","Office of the County Attorney"],
+      csos: ["Kilifi CSO Network","Rising Winners Youth Empowerment Initiative","Pwani Youth Network","Youth for a Sustainable World (YSW)","KELIN"],
+      development_partners: ["Planned Parenthood Global","Marie Stopes Kenya","UNFPA","UNICEF"],
+      community: ["Council of Elders","Interfaith Religious Leaders Forum","Youth advisory networks","Women's rights groups"]
     },
     budget_trend: [
       { fy:"2022/23", allocation_m:101.0 },
@@ -221,7 +222,7 @@ window.COUNTIES = [
     ],
     cso_strengths: ["Coastal community networks","Youth engagement","Maternal health programming"],
     cso_gaps: ["Strategic litigation","Budget advocacy","Policy documentation","Media engagement"],
-    coordination: ["CHMT monthly meetings","SGBV Task Force (inactive)","CSO Network Kilifi"],
+    coordination: ["County Reproductive Health Technical Working Group","Gender Technical Working Group","Child Protection Network","Ad hoc CSO coordination meetings","RMNCAH Committee"],
     updates: [
       { id:"kf-u01", date:"2026-06-10", title:"Governor Signature Campaign for SGBV Policy", body:"A coalition of 8 CSOs submitted a formal petition to the Governor's office demanding signature of the 2020 SGBV Policy. Follow-up meeting scheduled for July 2026.", source:"CREAW Kilifi", tags:["sgbv","policy","governor"] },
       { id:"kf-u02", date:"2026-05-05", title:"RMNCAH Act Implementation Review Workshop", body:"County stakeholders reviewed progress on RMNCAH Act implementation. Current rate stands at 33%. Key bottleneck identified as inadequate HCW capacity.", source:"PATH Kenya", tags:["rmncah","implementation"] }
@@ -261,10 +262,10 @@ window.COUNTIES = [
       { policy:"Cross-cutting", theme:"Harmful Cultural & Religious Practices Affecting SRHR", stage:"Advocacy & Community Engagement", materials:{ decision_maker:{label:"FAQ Brief",url:""}, community:{label:"Community Flyer",url:""}, media:{label:"",url:""} } }
     ],
     stakeholders: {
-      government: ["County Department of Health","County Gender Office","CHMT","County Assembly"],
-      csos: ["PATH Kenya","KELIN","NAYA Kwale","Kwale Women Network"],
-      development_partners: ["UNFPA","USAID","UNICEF"],
-      community: ["Council of Imams","Women's groups","Youth networks"]
+      government: ["County Department of Health","County Department of Education","County Department of Gender, Special Group and Youth Affairs","Kwale County Assembly Health Committee","Office of the National Commissioner, Kwale County"],
+      csos: ["Kwale CSOs Consortium","AN International Kwale","Kwale Youth and Governance Consortium","Maternal and Child Health Advocacy International","Teens Watch","Kwale Human Rights Network","Kenya Red Cross Kwale Branch"],
+      development_partners: ["World Vision","UNICEF","Care International","UNFPA"],
+      community: ["Council of Imams and Preachers of Kenya (CIPK)","Community health volunteers' network","Women's rights groups","Youth networks"]
     },
     budget_trend: [
       { fy:"2022/23", allocation_m:62.1 },
@@ -273,7 +274,7 @@ window.COUNTIES = [
     ],
     cso_strengths: ["Religious leader engagement","Community trust","Local knowledge"],
     cso_gaps: ["Policy advocacy","Budget tracking","Strategic litigation","CSO networking"],
-    coordination: ["CHMT meetings","SGBV Task Force","Interfaith SRHR Dialogue Platform"],
+    coordination: ["County Health Management Team meetings","Maternal and Child Health Technical Working Group","Informal CSO networking platforms","Gender Technical Working Group"],
     updates: [
       { id:"kw-u01", date:"2026-06-15", title:"Interfaith SRHR Dialogue — Kwale Town", body:"First-ever interfaith dialogue on SRHR involving the Council of Imams and Christian leaders. Agreement reached to co-develop community SRHR messaging.", source:"Kwale Women Network", tags:["interfaith","sgbv","community"] },
       { id:"kw-u02", date:"2026-04-20", title:"County SRHR Policy Development Workshop", body:"Stakeholder workshop to launch the SRHR policy development process. 22 organizations participated. Technical committee formed to draft the policy by Q4 2026.", source:"EACHRights Field Team", tags:["policy","workshop"] }
