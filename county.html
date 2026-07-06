@@ -285,6 +285,7 @@ document.getElementById('scorecard-summary').innerHTML = `
   <div>
     <span class="scorecard-rating" style="background:${ratingColor}22;color:${ratingColor};">${esc(scorecard.ratingLabel)}</span>
     <div class="scorecard-meta">${scorecard.totalScore} of ${scorecard.maxScore} points across ${scorecard.milestones.length} milestones in 7 advocacy stages</div>
+    ${scorecard.totalScore === 0 ? '<div class="scorecard-meta" style="color:var(--gold);font-weight:600;margin-top:4px;">📋 Baseline — awaiting first staff assessment. Scores are filled in via the Advocacy Scorecard Google Sheet as advocacy progresses.</div>' : ''}
   </div>`;
 
 const stagesEl = document.getElementById('scorecard-stages');
