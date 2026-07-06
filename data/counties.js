@@ -158,11 +158,7 @@ window.COUNTIES = [
       development_partners: ["Youth for a Sustainable World (YSW)","Plan International","PATH (Program for Appropriate Technology in Health)"],
       community: ["Religious leaders' network","Community Health Strategy Coordinating Committee","Youth Parliamentarians' forum","Women's rights networks"]
     },
-    budget_trend: [
-      { fy:"2022/23", allocation_m:85.2 },
-      { fy:"2023/24", allocation_m:91.5 },
-      { fy:"2024/25", allocation_m:99.8 }
-    ],
+    budget_trend: null,
     cso_strengths: ["Strong community networks","FGM elimination advocacy","HIV programming experience"],
     cso_gaps: ["Legislative advocacy","Budget analysis","Monitoring & evaluation","Coalition building"],
     coordination: ["County Reproductive Health Technical Working Group","Gender Technical Working Group","Informal CSO coordination meetings","County HIV Committee"],
@@ -192,7 +188,7 @@ window.COUNTIES = [
       { id:"kf-p01", name:"Kilifi County RMNCAH Act (2025)", year:2025, status:"Enacted", impl_pct:33, actors:["CDH","CHMT","CSOs"], gap:"Low implementation; funding shortfall", advocacy:"Develop county implementation plan with budget", doc_url:"https://slo-countybills.go.ke/api/v1/bill/pdf/B1KNHP7XG1_8_KILIFI%20COUNTY%20REPRODUCTIVE,MATERNAL,%20ADOLESCENT%20AND%20CHILD%20HEALTH%20BILL%202024.pdf" },
       { id:"kf-p02", name:"County SGBV Policy (2020)", year:2020, status:"Not Operational", impl_pct:0, actors:["County Executive","Gender Office"], gap:"Awaiting Governor's signature", advocacy:"Lobby Governor's office to sign immediately", doc_url:"https://fliphtml5.com/hbwww/vray/Kilifi_County_GBV_Policy_-_Draft_1.5/15/" },
       { id:"kf-p03", name:"Menstrual Health Management (MHM) Policy", year:2024, status:"Draft", impl_pct:17, actors:["CDH","Education Dept.","CSOs"], gap:"Not formally adopted; no county-specific MHM policy", advocacy:"Fast-track adoption process", doc_url:"" },
-      { id:"kf-p04", name:"Kilifi County SGBV Bill (2023)", year:2023, status:"In Progress", impl_pct:10, actors:["County Assembly","CSOs","Gender Office"], gap:"Bill awaiting enactment (real bill, verified via county bills portal; implementation status not in Baseline Report)", advocacy:"Lobby County Assembly for passage", doc_url:"https://slo-countybills.go.ke/api/v1/bill/pdf/8BZTY32RAX_3_KIlifi%20County%20Gender%20Based%20Violance%20Bill,%202023.pdf" },
+      { id:"kf-p04", name:"Kilifi County SGBV Bill (2023)", year:2023, status:"Not Yet Assessed", impl_pct:null, actors:["County Assembly","CSOs","Gender Office"], gap:"Bill verified as real via county bills portal; implementation status not yet documented by EACHRights", advocacy:"Lobby County Assembly for passage", doc_url:"https://slo-countybills.go.ke/api/v1/bill/pdf/8BZTY32RAX_3_KIlifi%20County%20Gender%20Based%20Violance%20Bill,%202023.pdf" },
       { id:"kf-p05", name:"Kilifi County CIDP — SRHR Components (2023–2027)", year:2023, status:"Adopted", impl_pct:47, actors:["County Government"], gap:"Limited SRHR-specific indicators; inadequate budget allocation; implementation tracking challenges", advocacy:"Advocate for enhanced SRHR focus in the next CIDP; push for dedicated SRHR budget lines", doc_url:"https://assets.countydevelopmentplan.com/cidp/pdfs/280d3e55-e43f-4db3-b028-8e4637440be4-KILIFI-COUNTY-CIDP-III_30.05.2023.pdf" },
       { id:"kf-p06", name:"National School Re-entry Guidelines (2020)", year:2020, status:"Limited Implementation", impl_pct:22, actors:["Ministry of Education","County Education Dept."], gap:"Limited county guidelines; cultural resistance; teacher capacity gaps", advocacy:"Advocate for county-specific guidelines; push for teacher training programs", doc_url:"https://www.education.go.ke/sites/default/files/2022-05/2020RH_NationalSchoolReEntryGuidelines.pdf" },
       { id:"kf-p07", name:"Menstrual Hygiene Management Policy (2019–2030)", year:2019, status:"Adopted", impl_pct:28, actors:["Ministry of Health","County Health Dept."], gap:"Implementation minimal at county level", advocacy:"Develop county MHM implementation plan", doc_url:"http://guidelines.health.go.ke:8000/media/Menstrual_Hygiene_Management_Policy_2019-2030-_May2020.pdf" },
@@ -218,11 +214,7 @@ window.COUNTIES = [
       development_partners: ["Planned Parenthood Global","Marie Stopes Kenya","UNFPA","UNICEF"],
       community: ["Council of Elders","Interfaith Religious Leaders Forum","Youth advisory networks","Women's rights groups"]
     },
-    budget_trend: [
-      { fy:"2022/23", allocation_m:101.0 },
-      { fy:"2023/24", allocation_m:108.5 },
-      { fy:"2024/25", allocation_m:115.2 }
-    ],
+    budget_trend: null,
     cso_strengths: ["Coastal community networks","Youth engagement","Maternal health programming"],
     cso_gaps: ["Strategic litigation","Budget advocacy","Policy documentation","Media engagement"],
     coordination: ["County Reproductive Health Technical Working Group","Gender Technical Working Group","Child Protection Network","Ad hoc CSO coordination meetings","RMNCAH Committee"],
@@ -278,11 +270,7 @@ window.COUNTIES = [
       development_partners: ["World Vision","UNICEF","Care International","UNFPA"],
       community: ["Council of Imams and Preachers of Kenya (CIPK)","Community health volunteers' network","Women's rights groups","Youth networks"]
     },
-    budget_trend: [
-      { fy:"2022/23", allocation_m:62.1 },
-      { fy:"2023/24", allocation_m:68.4 },
-      { fy:"2024/25", allocation_m:74.6 }
-    ],
+    budget_trend: null,
     cso_strengths: ["Religious leader engagement","Community trust","Local knowledge"],
     cso_gaps: ["Policy advocacy","Budget tracking","Strategic litigation","CSO networking"],
     coordination: ["County Health Management Team meetings","Maternal and Child Health Technical Working Group","Informal CSO networking platforms","Gender Technical Working Group"],

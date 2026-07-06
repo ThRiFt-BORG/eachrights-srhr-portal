@@ -151,7 +151,7 @@
       <h3>Key Health Indicators</h3>
       <div id="key-stats"></div>
     </div>
-    <div class="chart-wrap no-print">
+    <div class="chart-wrap no-print" id="budget-chart-wrap">
       <h3>SRHR Budget Trend (KShs M)</h3>
       <canvas id="budget-chart"></canvas>
     </div>
@@ -262,13 +262,17 @@ fetch('data/counties.geojson')
 document.getElementById('policy-count').textContent = `${C.policies.length} policies tracked`;
 const pb = document.getElementById('policy-tbody');
 C.policies.forEach(p => {
+  const hasScore = typeof p.impl_pct === 'number';
   const col = p.impl_pct>=60?'#27ae60':p.impl_pct>=30?'#e67e22':'#c0392b';
+  const implCell = hasScore
+    ? `<div style="display:flex;align-items:center;gap:6px;"><div class="impl-bar" style="width:70px;"><div class="impl-fill" style="width:${p.impl_pct}%;background:${col}"></div></div><span style="font-size:13px;font-weight:700;">${p.impl_pct}%</span></div>`
+    : `<span style="font-size:13px;color:var(--ink-lt);">— not yet assessed</span>`;
   const safeDoc = safeUrl(p.doc_url);
   pb.innerHTML += `<tr>
     <td><strong style="font-size:14px;">${esc(p.name)}</strong></td>
     <td style="font-size:13px;">${esc(p.year)}</td>
     <td><span class="pill ${slugStatus(p.status)}">${esc(p.status)}</span></td>
-    <td><div style="display:flex;align-items:center;gap:6px;"><div class="impl-bar" style="width:70px;"><div class="impl-fill" style="width:${p.impl_pct}%;background:${col}"></div></div><span style="font-size:13px;font-weight:700;">${p.impl_pct}%</span></div></td>
+    <td>${implCell}</td>
     <td style="font-size:13px;color:var(--ink-mid);max-width:180px;">${esc(p.gap)}</td>
     <td style="font-size:13px;color:var(--green-dk);max-width:180px;">${esc(p.advocacy)}</td>
     <td>${safeDoc?`<a class="doc-link" href="${esc(safeDoc)}" target="_blank" rel="noopener noreferrer">⬇</a>`:'—'}</td>
@@ -346,16 +350,22 @@ document.getElementById('cso-gaps').innerHTML = C.cso_gaps.map(g=>`<div class="c
 document.getElementById('coordination').innerHTML = C.coordination.map(c=>`<div style="font-size:13px;color:var(--ink-mid);padding:3px 0;border-bottom:1px solid var(--rule);">• ${esc(c)}</div>`).join('');
 
 // Charts
-new Chart(document.getElementById('budget-chart'),{
-  type:'bar',
-  data:{labels:C.budget_trend.map(b=>b.fy),datasets:[{label:'KShs M',data:C.budget_trend.map(b=>b.allocation_m),backgroundColor:'#1a6e3c',borderRadius:4}]},
-  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:11}},grid:{color:'#f0f0f0'}},x:{ticks:{font:{size:11}}}}}
-});
+if (C.budget_trend && C.budget_trend.length) {
+  new Chart(document.getElementById('budget-chart'),{
+    type:'bar',
+    data:{labels:C.budget_trend.map(b=>b.fy),datasets:[{label:'KShs M',data:C.budget_trend.map(b=>b.allocation_m),backgroundColor:'#1a6e3c',borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:11}},grid:{color:'#f0f0f0'}},x:{ticks:{font:{size:11}}}}}
+  });
+} else {
+  document.getElementById('budget-chart-wrap').innerHTML = '<h3>SRHR Budget Trend</h3><p style="font-size:13px;color:var(--ink-lt);">Budget trend data not yet verified for this county.</p>';
+}
+// Exclude not-yet-assessed policies (impl_pct === null) from the implementation chart
+const assessedPolicies = C.policies.filter(p => typeof p.impl_pct === 'number');
 new Chart(document.getElementById('impl-chart'),{
   type:'bar',
   data:{
-    labels:C.policies.map(p=>p.name.length>22?p.name.slice(0,21)+'…':p.name),
-    datasets:[{label:'%',data:C.policies.map(p=>p.impl_pct),backgroundColor:C.policies.map(p=>p.impl_pct>=60?'#1a6e3c':p.impl_pct>=30?'#e67e22':'#c0392b'),borderRadius:3}]
+    labels:assessedPolicies.map(p=>p.name.length>22?p.name.slice(0,21)+'…':p.name),
+    datasets:[{label:'%',data:assessedPolicies.map(p=>p.impl_pct),backgroundColor:assessedPolicies.map(p=>p.impl_pct>=60?'#1a6e3c':p.impl_pct>=30?'#e67e22':'#c0392b'),borderRadius:3}]
   },
   options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'#f0f0f0'}},y:{ticks:{font:{size:11}}}}}
 });
