@@ -112,7 +112,32 @@ window.COUNTIES = [
     updates: [
       { id:"hb-u01", date:"2026-06-01", title:"County SRHR Policy Technical Review Meeting", body:"Stakeholders convened to review the draft Homa Bay County Reproductive Health Bill. Technical review stage ongoing with inputs from CSOs and CHMT.", source:"EACHRights Field Team", tags:["policy","reproductive-health"] },
       { id:"hb-u02", date:"2026-04-15", title:"SGBV Awareness Campaign — Homa Bay Town", body:"A joint campaign by GVRC and NAYA reached over 2,000 community members across 5 sub-counties with SGBV prevention messaging.", source:"GVRC", tags:["sgbv","community"] }
-    ]
+    ],
+    // Source: EACHRights "Strengthening Disability-Inclusive Sexual and Reproductive Health Services in Homa Bay County" policy brief
+    disability_inclusion_brief: {
+      summary: "Persons with disabilities share the same SRH needs as everyone else but face added barriers: physical inaccessibility, limited communication channels, stigma and discrimination. Women and girls with disabilities face heightened SGBV risk with more difficulty reporting abuse or accessing timely medical, psychosocial, and legal support.",
+      foundation: [
+        { title:"Recognition of Vulnerability", body:"Recognizes PWDs as one of the groups most vulnerable to SGBV; prioritizes targeted protection and support." },
+        { title:"Inclusive Policy Development", body:"Developed with participation of the Homa Bay County Disability Forum and Organisations of Persons with Disabilities." },
+        { title:"Representation in Implementation", body:"Provides for PWD representation via the Department of Social Services in the county's multi-sectoral implementation/monitoring structure." }
+      ],
+      foundation_source: "Homa Bay County Sexual and Gender-Based Violence (SGBV) Policy (2022)",
+      scorecard: [
+        { area:"Accessible SRHR and GBV infrastructure", status:"Low", priority_action:"Upgrade health facilities, PSS centres and GBV recovery services to meet accessibility standards" },
+        { area:"Disability-inclusive communication", status:"Low", priority_action:"Produce accessible IEC materials and strengthen Kenyan Sign Language interpretation" },
+        { area:"Frontline provider capacity", status:"Moderate", priority_action:"Train health workers, police officers and social service providers on disability-inclusive SRHR and GBV response" },
+        { area:"Participation of persons with disabilities", status:"Established", priority_action:"Increase meaningful participation of OPDs in county planning, budgeting and monitoring" },
+        { area:"Disability-responsive budgeting", status:"Low", priority_action:"Allocate dedicated resources for disability-inclusive SRHR and GBV interventions" },
+        { area:"Monitoring and reporting", status:"Low", priority_action:"Collect disability-disaggregated SRHR and GBV data and report progress regularly" }
+      ],
+      priority_actions: [
+        { area:"Improve Accessibility of SRHR Services", lead:"County DoH, Dept of Public Works, County Facility Management Teams", actions:"Remodel facilities with ramps, accessible toilets, tactile signage; mobile outreach units and telehealth", impact:"Removes physical barriers to maternal care, HIV, FP, post-GBV care and other essential services" },
+        { area:"Build Capacity of Frontline Service Providers", lead:"County DoH, Dept of Social Services, Kenya School of Government, Professional Councils", actions:"Train health workers, police, legal officers, social service providers on disability rights and inclusive SRHR delivery; build skills in respectful care, communication, GBV confidentiality and response decision-making", impact:"Improves quality of care and reduces stigma, discrimination and communication barriers" },
+        { area:"Strengthen Budget Accountability", lead:"County Treasury, County Health Department, Dept of Social Services", actions:"Increase awareness on health financing; audit SRHR expenditures; track accessible IEC materials, outreach programmes and health worker training", impact:"Ensures disability inclusion is funded, monitored, and accountably implemented" },
+        { area:"Improve Data and Accountability", lead:"County Health Information Units, DoH, M&E Unit", actions:"Monitor access to family planning, antenatal care, maternal health, HIV, cancer screening, GBV services among PWDs; use evidence to improve planning and resource allocation", impact:"Helps identify service gaps and ensures interventions respond to PWDs' specific needs" }
+      ],
+      doc_url: ""
+    }
   },
   {
     id: "migori",

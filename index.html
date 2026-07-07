@@ -15,7 +15,7 @@
 .county-index a:hover{background:var(--green);color:#fff;}
 .np-category{display:inline-block;background:var(--paper);border:1px solid var(--rule);border-radius:3px;padding:2px 8px;font-size:12px;color:var(--ink-lt);}
 .section-white{background:var(--white);}
-.section-gold{background:var(--gold-lt);}
+.section-gold{background:var(--lime-lt);}
 .section-green{background:var(--green-lt);}
 .doc-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--green);font-weight:600;}
 .map-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;}
@@ -152,7 +152,7 @@ COUNTIES.forEach(c => {
 // National policies table
 const tbody = document.getElementById('national-tbody');
 NATIONAL_POLICIES.forEach((p,i) => {
-  const color = p.impl_pct>=60?'#27ae60':p.impl_pct>=40?'#e67e22':'#c0392b';
+  const color = p.impl_pct>=60?'#32A037':p.impl_pct>=40?'#F2781C':'#E51C23';
   const safeDoc = safeUrl(p.doc_url);
   const doc = safeDoc?`<a class="doc-link" href="${esc(safeDoc)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`:'<span style="color:var(--ink-lt);font-size:12px;">—</span>';
   tbody.innerHTML += `<tr>
@@ -182,7 +182,7 @@ fetch('data/counties.geojson')
     L.geoJSON(geojson, {
       style: feat => {
         const c = countyDataMap[feat.properties.id];
-        return { fillColor: c?.color||'#1a6e3c', fillOpacity:0.45, color:'#fff', weight:2 };
+        return { fillColor: c?.color||'#174F30', fillOpacity:0.45, color:'#fff', weight:2 };
       },
       onEachFeature: (feat, layer) => {
         const c = countyDataMap[feat.properties.id];

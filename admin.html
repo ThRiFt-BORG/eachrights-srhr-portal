@@ -11,7 +11,7 @@
 .admin-nav h3{color:rgba(255,255,255,.4);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:0 20px;margin-bottom:8px;margin-top:16px;}
 .admin-nav h3:first-child{margin-top:0;}
 .admin-nav a{display:block;padding:9px 20px;color:rgba(255,255,255,.7);font-size:14px;text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
-.admin-nav a:hover,.admin-nav a.active{background:rgba(255,255,255,.1);color:#fff;border-left-color:var(--gold);}
+.admin-nav a:hover,.admin-nav a.active{background:rgba(255,255,255,.1);color:#fff;border-left-color:var(--lime);}
 .admin-content{padding:32px 40px;background:var(--paper);}
 .admin-section{display:none;}
 .admin-section.active{display:block;}
@@ -54,7 +54,7 @@
 .guide-section h3{font-size:16px;font-weight:700;color:var(--green-dk);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--green-lt);}
 .guide-box{background:var(--paper);border-radius:6px;padding:16px;margin-bottom:12px;}
 .guide-box h4{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;}
-.guide-note{background:var(--gold-lt);border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;color:var(--ink-mid);margin-bottom:12px;}
+.guide-note{background:var(--lime-lt);border-left:3px solid var(--lime);padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;color:var(--ink-mid);margin-bottom:12px;}
 .guide-warning{background:var(--red-lt);border-left:3px solid var(--red);padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;color:var(--ink-mid);margin-bottom:12px;}
 .col-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
 .col-table th{background:var(--green);color:#fff;padding:8px 12px;text-align:left;font-size:12px;}
@@ -346,7 +346,7 @@ function renderPolicyViewer(countyId){
   C.policies.forEach(p=>{
     const isLive = overriddenIds.has(p.id);
     const hasScore = typeof p.impl_pct === 'number';
-    const col = p.impl_pct>=60?'#27ae60':p.impl_pct>=30?'#e67e22':'#c0392b';
+    const col = p.impl_pct>=60?'#32A037':p.impl_pct>=30?'#F2781C':'#E51C23';
     const implHtml = hasScore
       ? `<div class="impl-bar" style="width:60px;"><div class="impl-fill" style="width:${p.impl_pct}%;background:${col}"></div></div><span style="font-size:13px;font-weight:700;">${p.impl_pct}%</span>`
       : `<span style="font-size:13px;color:var(--ink-lt);">not yet assessed</span>`;

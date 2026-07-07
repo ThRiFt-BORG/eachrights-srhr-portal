@@ -1,30 +1,28 @@
 /* EACHRights SRHR Portal — Base Styles
-   Color scheme aligned with EACHRights organizational identity (green/teal primary)
+   Color palette aligned to EACHRights' official brand document
+   (Homa Bay Disability Inclusion + SRHR Policy Brief — sampled hex values)
 */
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
 
 :root {
-  /* EACHRights Brand Colors */
-  --green:      #1a6e3c;   /* EACHRights primary green */
-  --green-dk:   #134f2b;
-  --green-lt:   #e8f5ee;
-  --green-mid:  #2d8a52;
-  --gold:       #c9a227;   /* Accent gold */
-  --gold-lt:    #fdf5dc;
-  --red:        #c0392b;   /* Alert/critical */
-  --red-lt:     #fdecea;
-  --amber:      #e67e22;
-  --amber-lt:   #fef3e6;
-  --blue:       #1a5276;
-  --teal:       #148f77;
-  --teal-lt:    #e0f5f1;
+  /* EACHRights Brand Colors — sourced from the official policy brief's sampled palette */
+  --green-dk:   #174F30;   /* brief's primary dark green — hero/nav/sidebar */
+  --green:      #1B5C39;   /* general link/button green, between the brief's two greens */
+  --green-lt:   #E8F0EA;
+  --green-mid:  #32A037;   /* brief's "Established/positive" status green */
+  --lime:       #85C931;   /* brief's signature accent — logo mark, numerals, bold emphasis */
+  --lime-lt:    #F2F8E7;
+  --red:        #E51C23;   /* brief's "Low/critical" status red */
+  --red-lt:     #FCE9EA;
+  --amber:      #F2781C;   /* brief's "Moderate" status orange */
+  --amber-lt:   #FEF0E3;
   /* Neutrals */
   --ink:        #1a1a2e;
   --ink-mid:    #4a4a5a;
   --ink-lt:     #7a7a8a;
   --rule:       #dde3ee;
-  --paper:      #f4f6f8;
-  --sidebar:    #0d3d20;   /* Dark green nav */
+  --paper:      #F4F6F1;   /* brief's page background tint */
+  --sidebar:    #174F30;   /* nav bg = brief's primary dark green */
   --white:      #ffffff;
   --shadow:     0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06);
 }
@@ -38,7 +36,7 @@ img{max-width:100%;}
 /* ── TOP NAV ── */
 .top-nav{background:var(--sidebar);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:54px;position:sticky;top:0;z-index:200;}
 .nav-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;cursor:pointer;}
-.nav-brand .logo-dot{width:32px;height:32px;border-radius:6px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--sidebar);letter-spacing:-0.5px;flex-shrink:0;}
+.nav-brand .logo-dot{width:32px;height:32px;border-radius:6px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--sidebar);letter-spacing:-0.5px;flex-shrink:0;}
 .nav-links{display:flex;gap:4px;}
 .nav-links a,.nav-links button{color:rgba(255,255,255,0.75);text-decoration:none;background:none;border:none;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;font-family:inherit;transition:background .15s,color .15s;}
 .nav-links a:hover,.nav-links a.active,.nav-links button:hover{background:rgba(255,255,255,0.15);color:#fff;text-decoration:none;}
@@ -46,7 +44,7 @@ img{max-width:100%;}
 
 /* ── HERO BAND ── */
 .hero-band{background:var(--sidebar);color:#fff;padding:40px 48px 38px;}
-.hero-band .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.hero-band .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
 .hero-band h1{font-family:'Source Serif 4',serif;font-size:28px;font-weight:600;line-height:1.25;max-width:680px;margin-bottom:8px;}
 .hero-band p{font-size:15px;color:rgba(255,255,255,0.75);max-width:640px;line-height:1.6;margin-bottom:16px;}
 .hero-meta{display:flex;gap:24px;flex-wrap:wrap;}
@@ -57,7 +55,7 @@ img{max-width:100%;}
 .stat-bar{background:var(--green);display:flex;flex-wrap:wrap;}
 .stat-card{flex:1;min-width:160px;padding:20px 24px;border-right:1px solid rgba(255,255,255,0.12);color:#fff;}
 .stat-card:last-child{border-right:none;}
-.stat-card .num{font-family:'Source Serif 4',serif;font-size:32px;font-weight:600;line-height:1;color:var(--gold);}
+.stat-card .num{font-family:'Source Serif 4',serif;font-size:32px;font-weight:600;line-height:1;color:var(--lime);}
 .stat-card .lbl{font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px;line-height:1.3;}
 
 /* ── SECTION LAYOUT ── */
@@ -173,7 +171,7 @@ img{max-width:100%;}
 /* ── FOOTER ── */
 footer{background:var(--sidebar);color:rgba(255,255,255,.6);text-align:center;padding:24px 48px;font-size:12px;line-height:1.7;}
 footer strong{color:rgba(255,255,255,.9);}
-footer a{color:var(--gold);}
+footer a{color:var(--lime);}
 
 /* ── PRINT STYLES ── */
 @media print {
