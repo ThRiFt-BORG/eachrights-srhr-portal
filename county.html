@@ -33,6 +33,10 @@
 .section-green{background:var(--green-lt);}
 /* Advocacy scorecard */
 .scorecard-summary{display:flex;align-items:center;gap:20px;background:var(--white);border-radius:8px;padding:18px 20px;margin-bottom:18px;box-shadow:var(--shadow);}
+.mini-status{display:flex;align-items:center;gap:14px;}
+.mini-status-pct{font-family:'Source Serif 4',serif;font-size:32px;font-weight:600;color:var(--green-dk);line-height:1;}
+.mini-status-rating{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;margin-bottom:3px;}
+.mini-status-meta{font-size:11px;color:var(--ink-lt);}
 .scorecard-pct{font-family:'Source Serif 4',serif;font-size:44px;font-weight:600;color:var(--green-dk);line-height:1;}
 .scorecard-rating{display:inline-block;font-size:13px;font-weight:700;padding:4px 12px;border-radius:12px;margin-top:4px;}
 .scorecard-meta{font-size:13px;color:var(--ink-lt);margin-top:2px;}
@@ -44,12 +48,7 @@
 .milestone-chip.score-0 b{background:var(--ink-lt);}
 .milestone-chip.score-1 b{background:var(--amber);}
 .milestone-chip.score-2 b{background:var(--green);}
-.materials-table{width:100%;border-collapse:collapse;font-size:13px;}
-.materials-table th{background:var(--sidebar);color:#fff;padding:9px 12px;text-align:left;font-size:11px;letter-spacing:.05em;}
-.materials-table td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;}
-.materials-table tr:hover td{background:var(--green-lt);}
-.material-item{display:block;font-size:12px;color:var(--ink-mid);}
-.material-item.linked{color:var(--green);font-weight:600;}
+.material-item{display:block;font-size:12px;color:var(--ink-lt);}
 /* Disability inclusion brief */
 .dib-foundation{background:var(--lime-lt);border-left:3px solid var(--lime);border-radius:0 6px 6px 0;padding:14px 16px;margin:14px 0;}
 .dib-foundation-item{font-size:13px;color:var(--ink-mid);margin-bottom:8px;}
@@ -74,8 +73,9 @@
   </div>
   <div class="nav-links">
     <a href="index.html">← Counties</a>
+    <a href="resources.html">Resources</a>
     <a href="admin.html">⚙ Admin</a>
-    <button onclick="window.print()" class="print-btn">⎙ Print / PDF</button>
+    <button onclick="window.print()" class="print-btn">⎙ Print Profile</button>
   </div>
   <div class="nav-right" id="nav-county-name"></div>
 </nav>
@@ -160,7 +160,7 @@
     <div class="section no-print" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Advocacy Materials Tracker</h2><span class="meta" id="materials-count"></span></div>
       <div style="overflow-x:auto;">
-        <table class="materials-table">
+        <table class="policy-table">
           <thead><tr><th>Target Bill / Policy</th><th>Advocacy Theme</th><th>Stage</th><th>Decision-Maker</th><th>Community</th><th>Media</th></tr></thead>
           <tbody id="materials-tbody"></tbody>
         </table>
@@ -175,19 +175,12 @@
       <p style="font-size:13px;color:var(--ink-lt);margin-top:6px;">Opens a short form to submit a field update. It appears here automatically — refresh the page after submitting.</p>
     </div>
 
-    <!-- DOCUMENTS -->
-    <div class="section section-gold no-print" style="padding:24px;border-radius:8px;margin-bottom:24px;">
-      <div class="section-hd"><h2>Documents</h2><span class="meta">Policy documents and reports</span></div>
-      <div id="docs-list"></div>
-      <p style="font-size:13px;color:var(--ink-mid);margin-top:10px;">To attach documents, go to <a href="admin.html" style="color:var(--green);font-weight:600;">Admin Panel → Documents</a>.</p>
-    </div>
-
   </div>
 
   <!-- SIDEBAR -->
   <div class="county-sidebar">
     <div class="side-card">
-      <h3>Key Health Indicators</h3>
+      <h3>Key SRHR Indicators</h3>
       <div id="key-stats"></div>
     </div>
     <div class="chart-wrap no-print" id="budget-chart-wrap">
@@ -197,6 +190,10 @@
     <div class="chart-wrap no-print">
       <h3>Policy Implementation</h3>
       <canvas id="impl-chart"></canvas>
+    </div>
+    <div class="side-card">
+      <h3>Advocacy Status</h3>
+      <div id="advocacy-status-mini"></div>
     </div>
     <div class="side-card">
       <h3>Key Stakeholders</h3>
@@ -367,6 +364,16 @@ document.getElementById('scorecard-summary').innerHTML = `
     ${scorecard.totalScore === 0 ? '<div class="scorecard-meta" style="color:var(--lime);font-weight:600;margin-top:4px;">📋 Baseline — awaiting first staff assessment. Scores are filled in via the Advocacy Scorecard Google Sheet as advocacy progresses.</div>' : ''}
   </div>`;
 
+// Condensed Advocacy Status card — sidebar quick-glance version of the scorecard above
+document.getElementById('advocacy-status-mini').innerHTML = `
+  <div class="mini-status">
+    <div class="mini-status-pct">${scorecard.pct}%</div>
+    <div>
+      <span class="mini-status-rating" style="background:${ratingColor}22;color:${ratingColor};">${esc(scorecard.ratingLabel)}</span>
+      <div class="mini-status-meta">${scorecard.totalScore} / ${scorecard.maxScore} points</div>
+    </div>
+  </div>`;
+
 const stagesEl = document.getElementById('scorecard-stages');
 const byStage = {};
 scorecard.milestones.forEach(m => { (byStage[m.stage] = byStage[m.stage] || { name: m.stage_name, items: [] }).items.push(m); });
@@ -383,7 +390,7 @@ function materialCell(mat){
   if(!mat || !mat.label) return '<span style="color:var(--ink-lt);">—</span>';
   const url = safeUrl(mat.url);
   return url
-    ? `<a class="material-item linked" href="${esc(url)}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)}</a>`
+    ? `<a class="doc-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)}</a>`
     : `<span class="material-item">${esc(mat.label)}</span>`;
 }
 C.advocacy_materials.forEach(row => {
@@ -445,11 +452,6 @@ new Chart(document.getElementById('impl-chart'),{
   options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'#f0f0f0'}},y:{ticks:{font:{size:11}}}}}
 });
 
-// Docs
-const dl=document.getElementById('docs-list');
-const docsWithUrls = C.policies.map(p=>({name:p.name, url:safeUrl(p.doc_url)})).filter(p=>p.url);
-if(docsWithUrls.length){docsWithUrls.forEach(p=>{dl.innerHTML+=`<div style="padding:8px 0;border-bottom:1px solid var(--rule);font-size:14px;display:flex;justify-content:space-between;align-items:center;"><span>${esc(p.name)}</span><a class="doc-link" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">⬇ Download</a></div>`;}); }
-else{dl.innerHTML='<p style="font-size:14px;color:var(--ink-lt);">No documents attached yet.</p>';}
 })();
 </script>
 </body>

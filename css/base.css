@@ -90,6 +90,10 @@ img{max-width:100%;}
 .impl-bar{height:6px;background:#e0e0e0;border-radius:3px;min-width:80px;}
 .impl-fill{height:6px;border-radius:3px;transition:width .4s;}
 
+/* ── DOCUMENT DOWNLOAD BUTTON — shared across policy tables, materials tracker, resources ── */
+.doc-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--green-dk);background:var(--green-lt);border:1px solid rgba(23,79,48,.15);border-radius:5px;padding:4px 10px;text-decoration:none;white-space:nowrap;transition:background .15s,color .15s;}
+.doc-link:hover{background:var(--green-dk);color:#fff;text-decoration:none;}
+
 /* ── STATUS PILLS ── */
 .pill{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;}
 .pill-adopted{background:#d4edda;color:#155724;}
@@ -179,7 +183,7 @@ footer a{color:var(--lime);}
   body{background:#fff;font-size:11px;}
   .county-layout{grid-template-columns:1fr;padding:0;}
   .county-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .policy-table,.materials-table{font-size:10px;}
+  .policy-table{font-size:10px;}
   .section{padding:8px 0!important;}
   .hero-band{background:var(--sidebar)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:16px 20px!important;}
   .stat-bar{background:var(--green)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resources — EACHRights SRHR Portal</title>
+<link rel="stylesheet" href="css/base.css">
+<style>
+.intro-band{background:var(--white);padding:32px 48px;border-bottom:1px solid var(--rule);}
+.intro-band p{max-width:860px;font-size:15px;color:var(--ink-mid);line-height:1.7;}
+.filter-bar{background:var(--white);padding:0 48px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--rule);}
+.filter-bar label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-lt);}
+.filter-bar select{border:1px solid var(--rule);border-radius:6px;padding:8px 12px;font-size:14px;font-family:inherit;color:var(--ink);background:var(--paper);min-width:220px;}
+.res-count{font-size:13px;color:var(--ink-lt);margin-left:auto;}
+.theme-section{margin-bottom:12px;}
+.theme-hd{display:flex;align-items:baseline;gap:10px;padding:14px 0 10px;border-bottom:2px solid var(--green);}
+.theme-hd h3{font-size:16px;font-weight:600;color:var(--green-dk);margin:0;}
+.theme-hd .count{font-size:12px;color:var(--ink-lt);}
+.res-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px;}
+.res-table td{padding:10px 6px;border-bottom:1px solid var(--rule);vertical-align:middle;}
+.res-table tr:last-child td{border-bottom:none;}
+.res-table tr:hover td{background:var(--green-lt);}
+.res-county{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--green-dk);background:var(--green-lt);border-radius:4px;padding:2px 7px;white-space:nowrap;}
+.res-type{display:block;font-size:11px;color:var(--ink-lt);margin-top:2px;}
+.res-empty{padding:60px 20px;text-align:center;color:var(--ink-lt);font-size:14px;}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-brand" onclick="window.location='index.html'">
+    <div class="logo-dot">ER</div>
+    <span>EACHRights SRHR Portal</span>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Counties</a>
+    <a href="resources.html" class="active">Resources</a>
+    <a href="admin.html">⚙ Admin</a>
+  </div>
+  <div class="nav-right" id="last-updated"></div>
+</nav>
+
+<div class="hero-band">
+  <div class="eyebrow">EACHRights · Amplify Change · Kenya</div>
+  <h1>Resources Library</h1>
+  <p>Every policy document, brief, and advocacy material across all four counties and the national framework — organized by theme.</p>
+</div>
+
+<div class="filter-bar">
+  <label for="type-filter">Filter by document type</label>
+  <select id="type-filter">
+    <option value="all">All document types</option>
+    <option value="Policy Document">Policy Documents</option>
+    <option value="Decision-Maker Material">Decision-Maker Materials</option>
+    <option value="Community Material">Community Materials</option>
+    <option value="Media Material">Media Materials</option>
+  </select>
+  <span class="res-count" id="res-count"></span>
+</div>
+
+<div class="section section-white" id="resources-container"></div>
+
+<footer>
+  <strong>EACHRights — East African Centre for Human Rights</strong><br>
+  Supported by <a href="#">Amplify Change</a> · Three-Year SRHR Advocacy Project (2024–2027)
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="data/counties.js"></script>
+<script>
+document.getElementById('last-updated').textContent = 'Updated: ' + SITE.last_updated;
+
+// ── Collect every document across national policies, county policies, the disability brief, and the advocacy materials tracker ──
+function collectAllDocuments() {
+  const docs = [];
+
+  NATIONAL_POLICIES.forEach(p => {
+    docs.push({ county:'National', name:p.name, theme:p.theme||'Uncategorized', type:'Policy Document', url:p.doc_url });
+  });
+
+  COUNTIES.forEach(c => {
+    c.policies.forEach(p => {
+      docs.push({ county:c.name, name:p.name, theme:p.theme||'Uncategorized', type:'Policy Document', url:p.doc_url });
+    });
+
+    if (c.disability_inclusion_brief) {
+      const dib = c.disability_inclusion_brief;
+      docs.push({ county:c.name, name:'Disability Inclusion in SRHR — County Brief', theme:dib.theme||'Disability Inclusion in SRHR Services', type:'Policy Document', url:dib.doc_url });
+    }
+
+    const typeMap = { decision_maker:'Decision-Maker Material', community:'Community Material', media:'Media Material' };
+    c.advocacy_materials.forEach(m => {
+      Object.keys(typeMap).forEach(key => {
+        const mat = m.materials[key];
+        if (mat && mat.label) {
+          docs.push({ county:c.name, name:`${mat.label} — ${m.policy}`, theme:m.theme, type:typeMap[key], url:mat.url });
+        }
+      });
+    });
+  });
+
+  return docs;
+}
+
+const allDocs = collectAllDocuments();
+
+// Group by theme, preserving first-seen theme order
+const byTheme = {};
+allDocs.forEach(d => { (byTheme[d.theme] = byTheme[d.theme] || []).push(d); });
+
+const container = document.getElementById('resources-container');
+Object.keys(byTheme).sort().forEach(theme => {
+  const items = byTheme[theme];
+  const rows = items.map(d => {
+    const url = safeUrl(d.url);
+    const doc = url
+      ? `<a class="doc-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`
+      : '<span style="color:var(--ink-lt);font-size:12px;">Pending</span>';
+    return `<tr data-type="${esc(d.type)}">
+      <td><span class="res-county">${esc(d.county)}</span></td>
+      <td style="color:var(--ink);">${esc(d.name)}<div class="res-type">${esc(d.type)}</div></td>
+      <td style="text-align:right;">${doc}</td>
+    </tr>`;
+  }).join('');
+  container.innerHTML += `
+  <div class="theme-section" data-theme-section>
+    <div class="theme-hd"><h3>${esc(theme)}</h3><span class="count">${items.length} document${items.length===1?'':'s'}</span></div>
+    <table class="res-table"><tbody>${rows}</tbody></table>
+  </div>`;
+});
+
+// ── Type filter ──
+function applyFilter() {
+  const type = document.getElementById('type-filter').value;
+  let visible = 0;
+  document.querySelectorAll('#resources-container tr[data-type]').forEach(tr => {
+    const show = type === 'all' || tr.dataset.type === type;
+    tr.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.querySelectorAll('[data-theme-section]').forEach(section => {
+    const anyVisible = [...section.querySelectorAll('tr[data-type]')].some(tr => tr.style.display !== 'none');
+    section.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('res-count').textContent = `${visible} of ${allDocs.length} documents shown`;
+}
+document.getElementById('type-filter').addEventListener('change', applyFilter);
+applyFilter();
+</script>
+</body>
+</html>
