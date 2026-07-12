@@ -61,6 +61,12 @@
 .col-table td{padding:8px 12px;border-bottom:1px solid var(--rule);}
 .col-table tr:last-child td{border-bottom:none;}
 .col-table code{background:var(--paper);border:1px solid var(--rule);padding:1px 5px;border-radius:3px;font-size:11px;}
+.quick-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px;}
+.quick-action{flex:1;min-width:220px;display:flex;flex-direction:column;gap:6px;background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;text-decoration:none;box-shadow:var(--shadow);transition:border-color .15s,transform .15s;}
+.quick-action:hover{border-color:var(--green);transform:translateY(-1px);text-decoration:none;}
+.quick-action .qa-icon{font-size:20px;}
+.quick-action .qa-title{font-size:14px;font-weight:700;color:var(--green-dk);}
+.quick-action .qa-sub{font-size:12px;color:var(--ink-lt);line-height:1.5;}
 </style>
 </head>
 <body>
@@ -79,6 +85,7 @@
 
 <div style="max-width:900px;margin:16px auto 0;padding:0 24px;">
   <div class="guide-note">ℹ️ This page is a read-only monitor and staff guide — it shows the same publicly-visible data as the county pages, just organized for quick review. All real edits happen in the Google Sheet or the Updates Form, not here.</div>
+  <div class="quick-actions" id="quick-actions"></div>
 </div>
 
 <!-- STAFF DASHBOARD -->
@@ -288,6 +295,25 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="data/counties.js"></script>
 <script>
+// ── QUICK ACTIONS — links to the 3 staff-facing Google Forms ──
+document.getElementById('quick-actions').innerHTML = `
+  <a class="quick-action" href="${esc(window.UPDATES_FORM_URL)}" target="_blank" rel="noopener noreferrer">
+    <span class="qa-icon">📋</span>
+    <span class="qa-title">Report a Field Update</span>
+    <span class="qa-sub">Log an advocacy activity, meeting, or news item for a county.</span>
+  </a>
+  <a class="quick-action" href="${esc(window.TRACKING_TOOL_FORM_URL)}" target="_blank" rel="noopener noreferrer">
+    <span class="qa-icon">📊</span>
+    <span class="qa-title">Submit Quarterly Advocacy Tracking</span>
+    <span class="qa-sub">Record milestones, activities, decision-makers, and implementation status.</span>
+  </a>
+  <a class="quick-action" href="${esc(window.MATERIALS_UPLOAD_FORM_URL)}" target="_blank" rel="noopener noreferrer">
+    <span class="qa-icon">📎</span>
+    <span class="qa-title">Upload Advocacy Materials</span>
+    <span class="qa-sub">Submit a completed brief, flyer, or social media card for a tracked policy.</span>
+  </a>
+`;
+
 // ── NAV ──
 function showSection(id, el){
   document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));

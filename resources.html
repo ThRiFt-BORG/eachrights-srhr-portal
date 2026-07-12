@@ -92,8 +92,15 @@ function collectAllDocuments() {
     c.advocacy_materials.forEach(m => {
       Object.keys(typeMap).forEach(key => {
         const mat = m.materials[key];
-        if (mat && mat.label) {
-          docs.push({ county:c.name, name:`${mat.label} — ${m.policy}`, theme:m.theme, type:typeMap[key], url:mat.url });
+        if (!mat || !mat.label) return;
+        const urls = mat.urls || [];
+        if (!urls.length) {
+          docs.push({ county:c.name, name:`${mat.label} — ${m.policy}`, theme:m.theme, type:typeMap[key], url:'' });
+        } else {
+          urls.forEach((url, i) => {
+            const suffix = urls.length > 1 ? ` ${i + 1}` : '';
+            docs.push({ county:c.name, name:`${mat.label}${suffix} — ${m.policy}`, theme:m.theme, type:typeMap[key], url });
+          });
         }
       });
     });

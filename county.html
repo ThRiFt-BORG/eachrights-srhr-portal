@@ -388,10 +388,11 @@ document.getElementById('materials-count').textContent = `${C.advocacy_materials
 const mb = document.getElementById('materials-tbody');
 function materialCell(mat){
   if(!mat || !mat.label) return '<span style="color:var(--ink-lt);">—</span>';
-  const url = safeUrl(mat.url);
-  return url
-    ? `<a class="doc-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)}</a>`
-    : `<span class="material-item">${esc(mat.label)}</span>`;
+  const urls = (mat.urls || []).map(safeUrl).filter(Boolean);
+  if(!urls.length) return `<span class="material-item">${esc(mat.label)}</span>`;
+  if(urls.length === 1) return `<a class="doc-link" href="${esc(urls[0])}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)}</a>`;
+  const links = urls.map((u,i) => `<a class="doc-link" href="${esc(u)}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)} ${i+1}</a>`).join('');
+  return `<div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">${links}</div>`;
 }
 C.advocacy_materials.forEach(row => {
   mb.innerHTML += `<tr>
