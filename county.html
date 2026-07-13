@@ -183,6 +183,10 @@
       <canvas id="impl-chart"></canvas>
     </div>
     <div class="side-card">
+      <h3>Advocacy Status</h3>
+      <div id="advocacy-status-mini"></div>
+    </div>
+    <div class="side-card">
       <h3>Key Stakeholders</h3>
       <div id="stakeholders"></div>
     </div>
@@ -337,6 +341,18 @@ if (C.disability_inclusion_brief) {
     ? `<a class="doc-link" href="${esc(dibUrl)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`
     : '<p style="font-size:13px;color:var(--ink-lt);">Full policy brief PDF link pending.</p>';
 }
+
+// Condensed Advocacy Status card — sidebar quick-glance summary (live scores merged from the Advocacy Scorecard sheet, all default to 0 until scored by staff)
+const scorecard = window.getAdvocacyScorecard(countyId);
+const ratingColor = scorecard.pct>=100?'#32A037':scorecard.pct>=61?'#174F30':scorecard.pct>=31?'#F2781C':scorecard.pct>=1?'#85C931':'#7a7a8a';
+document.getElementById('advocacy-status-mini').innerHTML = `
+  <div class="mini-status">
+    <div class="mini-status-pct">${scorecard.pct}%</div>
+    <div>
+      <span class="mini-status-rating" style="background:${ratingColor}22;color:${ratingColor};">${esc(scorecard.ratingLabel)}</span>
+      <div class="mini-status-meta">${scorecard.totalScore} / ${scorecard.maxScore} points</div>
+    </div>
+  </div>`;
 
 // Advocacy materials tracker
 document.getElementById('materials-count').textContent = `${C.advocacy_materials.length} bills / policies tracked`;
