@@ -298,7 +298,7 @@ C.policies.forEach(p => {
     <td>${implCell}</td>
     <td style="font-size:13px;color:var(--ink-mid);max-width:180px;">${esc(p.gap)}</td>
     <td style="font-size:13px;color:var(--green-dk);max-width:180px;">${esc(p.advocacy)}</td>
-    <td>${safeDoc?`<a class="doc-link" href="${esc(safeDoc)}" target="_blank" rel="noopener noreferrer">⬇</a>`:'—'}</td>
+    <td>${safeDoc?`<a class="doc-link" href="${esc(safeDoc)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`:'—'}</td>
   </tr>`;
 });
 
@@ -334,7 +334,7 @@ if (C.disability_inclusion_brief) {
 
   const dibUrl = safeUrl(dib.doc_url);
   document.getElementById('dib-doc-link').innerHTML = dibUrl
-    ? `<a class="doc-link" href="${esc(dibUrl)}" target="_blank" rel="noopener noreferrer">⬇ Download full policy brief (PDF)</a>`
+    ? `<a class="doc-link" href="${esc(dibUrl)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`
     : '<p style="font-size:13px;color:var(--ink-lt);">Full policy brief PDF link pending.</p>';
 }
 
@@ -345,8 +345,8 @@ function materialCell(mat){
   if(!mat || !mat.label) return '<span style="color:var(--ink-lt);">—</span>';
   const urls = (mat.urls || []).map(safeUrl).filter(Boolean);
   if(!urls.length) return `<span class="material-item">${esc(mat.label)}</span>`;
-  if(urls.length === 1) return `<a class="doc-link" href="${esc(urls[0])}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)}</a>`;
-  const links = urls.map((u,i) => `<a class="doc-link" href="${esc(u)}" target="_blank" rel="noopener noreferrer">⬇ ${esc(mat.label)} ${i+1}</a>`).join('');
+  if(urls.length === 1) return `<a class="doc-link" href="${esc(urls[0])}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`;
+  const links = urls.map((u,i) => `<a class="doc-link" href="${esc(u)}" target="_blank" rel="noopener noreferrer">⬇ Download ${i+1}</a>`).join('');
   return `<div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">${links}</div>`;
 }
 C.advocacy_materials.forEach(row => {
