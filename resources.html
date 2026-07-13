@@ -43,18 +43,10 @@
 <div class="hero-band">
   <div class="eyebrow">EACHRights · Amplify Change · Kenya</div>
   <h1>Resources Library</h1>
-  <p>Every policy document, brief, and advocacy material across all four counties and the national framework — organized by theme.</p>
+  <p>Policy and legislative documents across all four counties and the national framework — organized by county for quick reference.</p>
 </div>
 
 <div class="filter-bar">
-  <label for="type-filter">Filter by document type</label>
-  <select id="type-filter">
-    <option value="all">All document types</option>
-    <option value="Policy Document">Policy Documents</option>
-    <option value="Decision-Maker Material">Decision-Maker Materials</option>
-    <option value="Community Material">Community Materials</option>
-    <option value="Media Material">Media Materials</option>
-  </select>
   <span class="res-count" id="res-count"></span>
 </div>
 
@@ -70,89 +62,42 @@
 <script>
 document.getElementById('last-updated').textContent = 'Updated: ' + SITE.last_updated;
 
-// ── Collect every document across national policies, county policies, the disability brief, and the advocacy materials tracker ──
+// ── Collect policy and legislative documents only, grouped by county ──
 function collectAllDocuments() {
   const docs = [];
 
-  NATIONAL_POLICIES.forEach(p => {
-    docs.push({ county:'National', name:p.name, theme:p.theme||'Uncategorized', type:'Policy Document', url:p.doc_url });
-  });
+  docs.push({ county:'National', items: NATIONAL_POLICIES.map(p => ({ name:p.name, year:p.year, url:p.doc_url })) });
 
   COUNTIES.forEach(c => {
-    c.policies.forEach(p => {
-      docs.push({ county:c.name, name:p.name, theme:p.theme||'Uncategorized', type:'Policy Document', url:p.doc_url });
-    });
-
-    if (c.disability_inclusion_brief) {
-      const dib = c.disability_inclusion_brief;
-      docs.push({ county:c.name, name:'Disability Inclusion in SRHR — County Brief', theme:dib.theme||'Disability Inclusion in SRHR Services', type:'Policy Document', url:dib.doc_url });
-    }
-
-    const typeMap = { decision_maker:'Decision-Maker Material', community:'Community Material', media:'Media Material' };
-    c.advocacy_materials.forEach(m => {
-      Object.keys(typeMap).forEach(key => {
-        const mat = m.materials[key];
-        if (!mat || !mat.label) return;
-        const urls = mat.urls || [];
-        if (!urls.length) {
-          docs.push({ county:c.name, name:`${mat.label} — ${m.policy}`, theme:m.theme, type:typeMap[key], url:'' });
-        } else {
-          urls.forEach((url, i) => {
-            const suffix = urls.length > 1 ? ` ${i + 1}` : '';
-            docs.push({ county:c.name, name:`${mat.label}${suffix} — ${m.policy}`, theme:m.theme, type:typeMap[key], url });
-          });
-        }
-      });
-    });
+    docs.push({ county:c.name, items: c.policies.map(p => ({ name:p.name, year:p.year, url:p.doc_url })) });
   });
 
   return docs;
 }
 
-const allDocs = collectAllDocuments();
-
-// Group by theme, preserving first-seen theme order
-const byTheme = {};
-allDocs.forEach(d => { (byTheme[d.theme] = byTheme[d.theme] || []).push(d); });
+const byCounty = collectAllDocuments();
+const totalDocs = byCounty.reduce((sum, g) => sum + g.items.length, 0);
 
 const container = document.getElementById('resources-container');
-Object.keys(byTheme).sort().forEach(theme => {
-  const items = byTheme[theme];
-  const rows = items.map(d => {
+byCounty.forEach(group => {
+  const rows = group.items.map(d => {
     const url = safeUrl(d.url);
     const doc = url
       ? `<a class="doc-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`
       : '<span style="color:var(--ink-lt);font-size:12px;">Pending</span>';
-    return `<tr data-type="${esc(d.type)}">
-      <td><span class="res-county">${esc(d.county)}</span></td>
-      <td style="color:var(--ink);">${esc(d.name)}<div class="res-type">${esc(d.type)}</div></td>
+    return `<tr>
+      <td style="color:var(--ink);">${esc(d.name)}${d.year?`<div class="res-type">${esc(String(d.year))}</div>`:''}</td>
       <td style="text-align:right;">${doc}</td>
     </tr>`;
   }).join('');
   container.innerHTML += `
-  <div class="theme-section" data-theme-section>
-    <div class="theme-hd"><h3>${esc(theme)}</h3><span class="count">${items.length} document${items.length===1?'':'s'}</span></div>
+  <div class="theme-section">
+    <div class="theme-hd"><h3>${esc(group.county)}</h3><span class="count">${group.items.length} document${group.items.length===1?'':'s'}</span></div>
     <table class="res-table"><tbody>${rows}</tbody></table>
   </div>`;
 });
 
-// ── Type filter ──
-function applyFilter() {
-  const type = document.getElementById('type-filter').value;
-  let visible = 0;
-  document.querySelectorAll('#resources-container tr[data-type]').forEach(tr => {
-    const show = type === 'all' || tr.dataset.type === type;
-    tr.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
-  document.querySelectorAll('[data-theme-section]').forEach(section => {
-    const anyVisible = [...section.querySelectorAll('tr[data-type]')].some(tr => tr.style.display !== 'none');
-    section.style.display = anyVisible ? '' : 'none';
-  });
-  document.getElementById('res-count').textContent = `${visible} of ${allDocs.length} documents shown`;
-}
-document.getElementById('type-filter').addEventListener('change', applyFilter);
-applyFilter();
+document.getElementById('res-count').textContent = `${totalDocs} documents shown`;
 </script>
 </body>
 </html>

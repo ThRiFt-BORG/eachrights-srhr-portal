@@ -147,15 +147,6 @@
       <div id="dib-doc-link" style="margin-top:14px;"></div>
     </div>
 
-    <!-- ADVOCACY SCORECARD -->
-    <div class="section section-green" style="padding:24px 0 28px;border-radius:8px;margin-bottom:24px;">
-      <div class="section-hd" style="padding:0 20px 10px;"><h2>Advocacy Progress Scorecard</h2><span class="meta" id="adv-count"></span></div>
-      <div style="padding:0 20px;">
-        <div class="scorecard-summary" id="scorecard-summary"></div>
-        <div id="scorecard-stages" class="no-print"></div>
-      </div>
-    </div>
-
     <!-- ADVOCACY MATERIALS -->
     <div class="section no-print" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Advocacy Materials Tracker</h2><span class="meta" id="materials-count"></span></div>
@@ -190,10 +181,6 @@
     <div class="chart-wrap no-print">
       <h3>Policy Implementation</h3>
       <canvas id="impl-chart"></canvas>
-    </div>
-    <div class="side-card">
-      <h3>Advocacy Status</h3>
-      <div id="advocacy-status-mini"></div>
     </div>
     <div class="side-card">
       <h3>Key Stakeholders</h3>
@@ -350,38 +337,6 @@ if (C.disability_inclusion_brief) {
     ? `<a class="doc-link" href="${esc(dibUrl)}" target="_blank" rel="noopener noreferrer">⬇ Download full policy brief (PDF)</a>`
     : '<p style="font-size:13px;color:var(--ink-lt);">Full policy brief PDF link pending.</p>';
 }
-
-// Advocacy scorecard — live scores merged from the Advocacy Scorecard sheet (all default to 0 until scored by staff)
-const scorecard = window.getAdvocacyScorecard(countyId);
-document.getElementById('adv-count').textContent = `${scorecard.totalScore} / ${scorecard.maxScore} points`;
-
-const ratingColor = scorecard.pct>=100?'#32A037':scorecard.pct>=61?'#174F30':scorecard.pct>=31?'#F2781C':scorecard.pct>=1?'#85C931':'#7a7a8a';
-document.getElementById('scorecard-summary').innerHTML = `
-  <div class="scorecard-pct">${scorecard.pct}%</div>
-  <div>
-    <span class="scorecard-rating" style="background:${ratingColor}22;color:${ratingColor};">${esc(scorecard.ratingLabel)}</span>
-    <div class="scorecard-meta">${scorecard.totalScore} of ${scorecard.maxScore} points across ${scorecard.milestones.length} milestones in 7 advocacy stages</div>
-    ${scorecard.totalScore === 0 ? '<div class="scorecard-meta" style="color:var(--lime);font-weight:600;margin-top:4px;">📋 Baseline — awaiting first staff assessment. Scores are filled in via the Advocacy Scorecard Google Sheet as advocacy progresses.</div>' : ''}
-  </div>`;
-
-// Condensed Advocacy Status card — sidebar quick-glance version of the scorecard above
-document.getElementById('advocacy-status-mini').innerHTML = `
-  <div class="mini-status">
-    <div class="mini-status-pct">${scorecard.pct}%</div>
-    <div>
-      <span class="mini-status-rating" style="background:${ratingColor}22;color:${ratingColor};">${esc(scorecard.ratingLabel)}</span>
-      <div class="mini-status-meta">${scorecard.totalScore} / ${scorecard.maxScore} points</div>
-    </div>
-  </div>`;
-
-const stagesEl = document.getElementById('scorecard-stages');
-const byStage = {};
-scorecard.milestones.forEach(m => { (byStage[m.stage] = byStage[m.stage] || { name: m.stage_name, items: [] }).items.push(m); });
-Object.keys(byStage).sort((a,b)=>a-b).forEach(stageNum => {
-  const stage = byStage[stageNum];
-  const chips = stage.items.map(m => `<span class="milestone-chip score-${m.score}" title="${esc(m.indicator)}">${esc(m.name)} <b>${m.score}</b></span>`).join('');
-  stagesEl.innerHTML += `<div class="stage-group"><div class="stage-name">${stageNum}. ${esc(stage.name)}</div><div class="milestone-row">${chips}</div></div>`;
-});
 
 // Advocacy materials tracker
 document.getElementById('materials-count').textContent = `${C.advocacy_materials.length} bills / policies tracked`;
