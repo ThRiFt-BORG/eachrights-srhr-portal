@@ -203,5 +203,9 @@ footer a{color:var(--lime);}
   .stat-bar{flex-direction:column;}
   .stat-card{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);}
   .cards-grid{grid-template-columns:1fr;}
-  .top-nav{padding:0 16px;}
+  .top-nav{padding:0 12px;}
+  .nav-brand span{display:none;}
+  .nav-right{display:none;}
+  .nav-links{gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .nav-links a,.nav-links button{padding:6px 9px;font-size:12px;white-space:nowrap;}
 }
