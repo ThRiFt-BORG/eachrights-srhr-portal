@@ -1,6 +1,6 @@
 # Next Steps
 
-Planning notes for continuing this project. Last updated: 2026-07-12 (commit `3dfaf7e`, local only — not pushed).
+Planning notes for continuing this project. Last updated: 2026-07-13 (commit `b4a313e`, pushed and live).
 
 ## Forms-first self-service plan — MOSTLY BUILT
 
@@ -17,13 +17,20 @@ Per Maureen Onyango's "Advocacy Tracking and Documentation Tool.docx" and "Advoc
 
 **Update Hub** — done differently than planned: no new page. Added a "Quick Actions" card directly to the top of `admin.html` (existing staff dashboard) linking all 3 forms. Much smaller than the originally-scoped new page.
 
-## Advocacy materials — wired in, NOT PUSHED
+## Advocacy materials — PUSHED, scoped to Homa Bay only
 
-Sourced 52 files from the client's "COMPLETED DESIGNS" Drive folder (also mirrored locally at `data/Completed designs/` — **do not commit that folder, it's 320MB, git-ignore it or leave untracked**). Cross-referenced against every `advocacy_materials` entry in `counties.js` and wired in real Google Drive `urls[]` links for every confident match (commit `3dfaf7e`, local only).
+Maureen reviewed on 2026-07-13 (email + 2 marked-up screenshots) ahead of sending the full deliverable package to the client/funder at 4pm the same day. Her instructions, all applied and pushed live same-day (commits `f40ab79`, `52180fa`, `b4a313e`):
 
-**This commit is deliberately NOT pushed.** Maureen's instruction was explicit: wait for client review/approval before publishing material links. Push only after getting that confirmation (see follow-up email, unanswered as of last check).
+1. **Advocacy material links scoped to Homa Bay only** — Migori/Kilifi/Kwale entries in `counties.js` kept their labels but had `urls[]` emptied back out; only Homa Bay's links (the ones she'd shared as demos) are live. The other 3 counties' confidently-matched links from the 2026-07-12 Drive sourcing pass are **not deleted, just stripped from the data** — restore them once client + funder approve (git history has the full set, see commit `3dfaf7e`).
+2. **Advocacy Progress Scorecard section removed** from all 4 county boards (main section + sidebar mini card) — was showing an all-zero baseline, not ready for client eyes.
+3. **Disability Inclusion in SRHR brief removed** from the Homa Bay board per her marked-up screenshot (the `disability_inclusion_brief` object was deleted from Homa Bay's entry in `counties.js`; the HTML/JS template that renders it is still in `county.html`, just currently unused by any county).
+4. **Resources page restructured** — grouped by county instead of theme, policy/legislative documents only, no advocacy materials listed.
 
-Left empty on purpose (not bugs):
+Also fixed same session (not from her review, found during QA):
+- **Download button labels made consistent** — every doc link across the policy table, materials tracker, and admin document viewer now reads "⬇ Download", matching the homepage/Resources style.
+- **Mobile nav overflow bug** — the top nav (Counties/National Policies/Resources/Admin) overflowed off-screen below ~600px, cutting off the Admin link. Fixed with a responsive breakpoint; verified clean on all 4 county pages + homepage + resources + admin at 375px width.
+
+Left empty on purpose (not bugs, from the 2026-07-12 sourcing pass — still true, now moot until re-enabled):
 - Every county's flagship policy/bill — no design file exists for any of the 4 counties' lead policy yet
 - Kilifi's Menstrual Hygiene Policy — the one file found is ambiguous between two different real site policies (a draft county one and an adopted national one)
 - Kilifi's CIDP decision-maker slot — 2 candidate files in Drive, never opened to disambiguate
@@ -33,17 +40,17 @@ Left empty on purpose (not bugs):
 
 ## Outstanding — needs Maureen/Francis, not code
 
-A follow-up email was drafted covering (not yet sent, or sent but unanswered as of last session):
 1. Francis — still wants a decision on the "Download County Specific Advocacy products" link (per-county bundle vs per-item)
-2. Materials sign-off status — has client review happened yet?
+2. **When client + funder approve the materials**, restore Migori/Kilifi/Kwale advocacy links in `counties.js` (currently stripped, see above)
 3. Flagship materials — still missing across all 4 counties, still coming or launch without them?
-4. Document list gaps in the Tracking Tool form (see above) — add now or hold for next review pass?
+4. Document list gaps in the Tracking Tool form (Migori's stalled Reproductive Health Bill has no way to be reported on) — add now or hold for next review pass?
 5. The Knowledge Management sentence that's cut off mid-word in her own doc
+6. Whether the removed Disability Inclusion brief and Advocacy Progress Scorecard come back in some form, and when — no word yet on whether these are gone for good or pending a redo
 
 ## Other cleanup items
 
 - **Stray "Form Responses 3" tab**: an empty duplicate of the original Field Update form got created (likely by the pre-existing `createUpdatesForm()` Apps Script function running again on 2026-07-12). The duplicate Form was deleted from Drive, but the Sheet tab itself didn't fully unlink/become deletable yet — cosmetic issue only, safe to ignore or revisit.
-- **New advocacy scoring model** (type-specific milestones + 28-point activity score + trend graph, from Doc1) — NOT yet reflected on the live site's display. Site still shows the old 15-milestone scorecard. Deliberately deferred until the Tracking Tool form has collected at least one real reporting period — a trend graph needs more than one data point.
+- **New advocacy scoring model** (type-specific milestones + 28-point activity score + trend graph, from Doc1) — the old all-zero scorecard display was removed entirely on 2026-07-13 (see above), not just deferred. Once the Tracking Tool form has collected at least one real reporting period, this needs to be rebuilt with real data rather than simply un-hidden.
 - **Decision-makers engaged** — new field captured by the Tracking Tool form, not displayed anywhere on the site yet.
 - Repo/Sheet ownership still under Peter's personal accounts — unchanged, still on the long-term backlog.
 - cPanel migration — still on hold pending client hosting details.
@@ -58,3 +65,4 @@ A follow-up email was drafted covering (not yet sent, or sent but unanswered as 
 6. Homabay - Disability Inclusion + SRHR Policy Brief.pdf (color palette + Disability Inclusion Brief content)
 7. Advocacy Tracking and Documentation Tool.docx (2026-07-12)
 8. "COMPLETED DESIGNS" Drive folder / local mirror, 52 files across 4 counties (2026-07-12)
+9. Maureen's review email + 2 marked-up screenshots (2026-07-13), applied same-day ahead of her 4pm client/funder deliverable send
