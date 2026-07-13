@@ -1,6 +1,6 @@
 # Next Steps
 
-Planning notes for continuing this project. Last updated: 2026-07-13 (commit `b4a313e`, pushed and live).
+Planning notes for continuing this project. Last updated: 2026-07-13 (commit `7e78c37`, pushed and live).
 
 ## Forms-first self-service plan — MOSTLY BUILT
 
@@ -22,7 +22,7 @@ Per Maureen Onyango's "Advocacy Tracking and Documentation Tool.docx" and "Advoc
 Maureen reviewed on 2026-07-13 (email + 2 marked-up screenshots) ahead of sending the full deliverable package to the client/funder at 4pm the same day. Her instructions, all applied and pushed live same-day (commits `f40ab79`, `52180fa`, `b4a313e`):
 
 1. **Advocacy material links scoped to Homa Bay only** — Migori/Kilifi/Kwale entries in `counties.js` kept their labels but had `urls[]` emptied back out; only Homa Bay's links (the ones she'd shared as demos) are live. The other 3 counties' confidently-matched links from the 2026-07-12 Drive sourcing pass are **not deleted, just stripped from the data** — restore them once client + funder approve (git history has the full set, see commit `3dfaf7e`).
-2. **Advocacy Progress Scorecard section removed** from all 4 county boards (main section + sidebar mini card) — was showing an all-zero baseline, not ready for client eyes.
+2. **Advocacy Progress Scorecard — full section removed, sidebar summary restored.** The full 7-stage/15-milestone breakdown (main content, all-zero baseline) is removed from all 4 county boards per her screenshot — correctly, not ready for client eyes. It was first cut alongside the sidebar "Advocacy Status" mini-card too, but that was a misread: per an earlier meeting with Maureen, the sidebar card was always meant to *replace* the full section (a permanent quick-glance widget), not duplicate it — that follow-through (dropping the full section once the sidebar one existed) had just never actually happened until now. So as of commit `7e78c37`, the sidebar "Advocacy Status" card is back (between Policy Implementation and Key Stakeholders) and the full section stays gone. That's the intended end state, not a placeholder.
 3. **Disability Inclusion in SRHR brief removed** from the Homa Bay board per her marked-up screenshot (the `disability_inclusion_brief` object was deleted from Homa Bay's entry in `counties.js`; the HTML/JS template that renders it is still in `county.html`, just currently unused by any county).
 4. **Resources page restructured** — grouped by county instead of theme, policy/legislative documents only, no advocacy materials listed.
 
@@ -40,17 +40,17 @@ Left empty on purpose (not bugs, from the 2026-07-12 sourcing pass — still tru
 
 ## Outstanding — needs Maureen/Francis, not code
 
-1. Francis — still wants a decision on the "Download County Specific Advocacy products" link (per-county bundle vs per-item)
-2. **When client + funder approve the materials**, restore Migori/Kilifi/Kwale advocacy links in `counties.js` (currently stripped, see above)
+1. **Francis's county-specific download** — recommended approach: a "Download All [County] Advocacy Products" button per county board, linking straight to that county's Drive subfolder (already organized: `HOMABAY ADVOCACY PRODUCTS`, `MIGORI ADVOCACY PRODUCTS`, `KILIFI ADVOCACY PRODUCTS`, `KWALE ADVOCACY PRODUCTS` under "COMPLETED DESIGNS"). Drive zips a folder download natively — no custom bundling/maintenance needed. Keeps the existing per-item links too, so it's not an either/or. Only add this for **Homa Bay** now (materials approved as demo); hold Migori/Kilifi/Kwale until client/funder approval, same restriction as the per-item links. Blocked on: need the Homa Bay folder's shareable link from Peter (Share → Anyone with the link → Copy link).
+2. **When client + funder approve the materials**, restore Migori/Kilifi/Kwale advocacy links in `counties.js` (currently stripped, see above), and add their Drive-folder bundle-download buttons too.
 3. Flagship materials — still missing across all 4 counties, still coming or launch without them?
 4. Document list gaps in the Tracking Tool form (Migori's stalled Reproductive Health Bill has no way to be reported on) — add now or hold for next review pass?
 5. The Knowledge Management sentence that's cut off mid-word in her own doc
-6. Whether the removed Disability Inclusion brief and Advocacy Progress Scorecard come back in some form, and when — no word yet on whether these are gone for good or pending a redo
+6. Whether the removed Disability Inclusion brief comes back in some form, and when — no word yet on whether it's gone for good or pending a redo. (The Advocacy Progress Scorecard question is resolved — see above, sidebar summary is the permanent intended state.)
 
 ## Other cleanup items
 
 - **Stray "Form Responses 3" tab**: an empty duplicate of the original Field Update form got created (likely by the pre-existing `createUpdatesForm()` Apps Script function running again on 2026-07-12). The duplicate Form was deleted from Drive, but the Sheet tab itself didn't fully unlink/become deletable yet — cosmetic issue only, safe to ignore or revisit.
-- **New advocacy scoring model** (type-specific milestones + 28-point activity score + trend graph, from Doc1) — the old all-zero scorecard display was removed entirely on 2026-07-13 (see above), not just deferred. Once the Tracking Tool form has collected at least one real reporting period, this needs to be rebuilt with real data rather than simply un-hidden.
+- **New advocacy scoring model** (type-specific milestones + 28-point activity score + trend graph, from Doc1) — the full main-content scorecard section (7-stage milestone breakdown) is permanently removed per Maureen; the sidebar "Advocacy Status" mini-card is the intended permanent summary and is live, pulling real scores from the Advocacy Scorecard sheet the moment staff fill them in (currently 0/30, "Not Started", since no scores submitted yet). No further build needed here — this resolves itself as staff use the Tracking Tool form. A trend graph (mentioned in Doc1) was never built and isn't currently planned.
 - **Decision-makers engaged** — new field captured by the Tracking Tool form, not displayed anywhere on the site yet.
 - Repo/Sheet ownership still under Peter's personal accounts — unchanged, still on the long-term backlog.
 - cPanel migration — still on hold pending client hosting details.
