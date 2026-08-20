@@ -7,7 +7,7 @@ window.SITE = {
   org: "East African Centre for Human Rights (EACHRights)",
   partner: "Amplify Change",
   project_period: "2024–2027",
-  last_updated: "June 2026"
+  last_updated: "August 2026"
 };
 
 window.NATIONAL_POLICIES = [
