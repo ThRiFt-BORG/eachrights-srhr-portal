@@ -58,6 +58,7 @@ window.COUNTIES = [
   {
     id: "homa-bay",
     name: "Homa Bay",
+    advocacy_bundle_url: "https://drive.google.com/drive/folders/1QPBuYG5ZokxKon4ph0Cm5qSpIf9cMDzJ",
     region: "Nyanza",
     color: "#c0392b",
     population: 1419662,
@@ -118,6 +119,7 @@ window.COUNTIES = [
   {
     id: "migori",
     name: "Migori",
+    advocacy_bundle_url: "https://drive.google.com/drive/folders/1HoDqiVpZOMoPEPpxDpUMyuuI_tqIIkTt",
     region: "Nyanza",
     color: "#8e44ad",
     population: 1116436,
@@ -172,6 +174,7 @@ window.COUNTIES = [
   {
     id: "kilifi",
     name: "Kilifi",
+    advocacy_bundle_url: "https://drive.google.com/drive/folders/1iV9KATrVI7Mfq3rzI0xpOKcU5l-IXi-J",
     region: "Coast",
     color: "#2980b9",
     population: 1453787,
@@ -229,6 +232,7 @@ window.COUNTIES = [
   {
     id: "kwale",
     name: "Kwale",
+    advocacy_bundle_url: "https://drive.google.com/drive/folders/1lC51ir0bgOVKJfhQpak59b5bLG1mADmb",
     region: "Coast",
     color: "#27ae60",
     population: 866820,

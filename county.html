@@ -150,6 +150,7 @@
     <!-- ADVOCACY MATERIALS -->
     <div class="section no-print" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Advocacy Materials Tracker</h2><span class="meta" id="materials-count"></span></div>
+      <div id="materials-bundle-link" style="margin-bottom:14px;"></div>
       <div style="overflow-x:auto;">
         <table class="policy-table">
           <thead><tr><th>Target Bill / Policy</th><th>Advocacy Theme</th><th>Stage</th><th>Decision-Maker</th><th>Community</th><th>Media</th></tr></thead>
@@ -356,6 +357,10 @@ document.getElementById('advocacy-status-mini').innerHTML = `
 
 // Advocacy materials tracker
 document.getElementById('materials-count').textContent = `${C.advocacy_materials.length} bills / policies tracked`;
+if (C.advocacy_bundle_url) {
+  document.getElementById('materials-bundle-link').innerHTML =
+    `<a class="doc-link" href="${esc(C.advocacy_bundle_url)}" target="_blank" rel="noopener noreferrer">⬇ Download All ${esc(C.name)} Advocacy Products</a>`;
+}
 const mb = document.getElementById('materials-tbody');
 function materialCell(mat){
   if(!mat || !mat.label) return '<span style="color:var(--ink-lt);">—</span>';
