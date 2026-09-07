@@ -345,6 +345,22 @@ function clampPct(n) {
   return Math.max(0, Math.min(100, v));
 }
 
+// Google Sheets exports Form-submitted dates in the sheet's locale format
+// (e.g. "9/7/2026"), while hand-written baseline dates below are ISO
+// ("2026-06-01"). Both need to be ISO before display or sorting, since
+// updates are sorted with plain string comparison.
+function normalizeDate(raw) {
+  raw = (raw || '').trim();
+  if (!raw) return '';
+  if (/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw.slice(0, 10);
+  const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) {
+    const [, mo, da, yr] = m;
+    return `${yr}-${mo.padStart(2, '0')}-${da.padStart(2, '0')}`;
+  }
+  return raw;
+}
+
 // fetch with a hard timeout so a hung network doesn't block rendering forever
 async function fetchWithTimeout(url, ms) {
   const ctrl = new AbortController();
@@ -395,7 +411,7 @@ window.loadGoogleSheetsData = async function() {
       const county_id = VALID_COUNTY_IDS.has(rawCounty) ? rawCounty : COUNTY_LABEL_TO_ID[rawCounty];
       const title = (row[UPDATES_FORM_HEADERS.title] || '').trim();
       if (!county_id || !title) return;
-      const date = (row[UPDATES_FORM_HEADERS.date] || '').trim();
+      const date = normalizeDate(row[UPDATES_FORM_HEADERS.date]);
       const tagsRaw = (row[UPDATES_FORM_HEADERS.tags] || '').trim();
       if (!window.SHEET_DATA.updates[county_id]) window.SHEET_DATA.updates[county_id] = [];
       window.SHEET_DATA.updates[county_id].push({
