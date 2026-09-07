@@ -263,7 +263,7 @@ const countyBounds = {
   'kwale':    [[-4.7,38.9],[-3.5,39.8]]
 };
 const cmap = L.map('county-map', {scrollWheelZoom:false, zoomControl:true, dragging:false, doubleClickZoom:false});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'© CARTO © OSM',maxZoom:18}).addTo(cmap);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:18}).addTo(cmap);
 
 fetch('data/counties.geojson')
   .then(r=>r.json())
