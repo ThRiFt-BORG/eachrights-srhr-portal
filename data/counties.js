@@ -297,7 +297,7 @@ window.COUNTIES = [
 
 const GS_DEFAULTS = {
   policies:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
-  updates:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=1369410892&single=true&output=csv",
+  updates:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=841913399&single=true&output=csv",
   advocacy:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=1539470058&single=true&output=csv"
 };
 
@@ -312,8 +312,9 @@ window.MATERIALS_UPLOAD_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeZ
 
 const VALID_COUNTY_IDS = new Set(['homa-bay', 'migori', 'kilifi', 'kwale']);
 const VALID_MILESTONE_IDS = new Set(window.ADVOCACY_MILESTONES.map(m => m.id));
-// Google Forms writes the exact question text as the column header — these match
-// the actual "Form Responses 1" tab headers (Timestamp column is ignored).
+// Expected column headers for the Updates tab. Matched case/whitespace-
+// insensitively (see normalizeHeader) so a stray extra space or a different
+// capitalization in the sheet doesn't silently drop a column.
 const UPDATES_FORM_HEADERS = {
   county: 'County',
   date: 'Date Event',
@@ -361,6 +362,23 @@ function normalizeDate(raw) {
   return raw;
 }
 
+// Matches a wanted column name against a sheet's actual header row,
+// ignoring case and collapsing whitespace, so a retyped header cell
+// ("Source/Organization" vs "Source/ Organization") doesn't silently
+// come back empty.
+function normalizeHeader(s) {
+  return String(s || '').trim().toLowerCase().replace(/\s*\/\s*/g, '/').replace(/\s+/g, ' ');
+}
+function buildHeaderKeyMap(fields) {
+  const map = {};
+  (fields || []).forEach(f => { map[normalizeHeader(f)] = f; });
+  return map;
+}
+function getByHeader(row, headerKeyMap, wantedHeader) {
+  const actualKey = headerKeyMap[normalizeHeader(wantedHeader)];
+  return actualKey ? (row[actualKey] || '').trim() : '';
+}
+
 // fetch with a hard timeout so a hung network doesn't block rendering forever
 async function fetchWithTimeout(url, ms) {
   const ctrl = new AbortController();
@@ -406,20 +424,21 @@ window.loadGoogleSheetsData = async function() {
     const res2 = await fetchWithTimeout(GS_DEFAULTS.updates, 5000);
     const text2 = await res2.text();
     const parsed2 = Papa.parse(text2.trim(), { header: true, skipEmptyLines: true });
+    const updatesHeaderMap = buildHeaderKeyMap(parsed2.meta.fields);
     parsed2.data.forEach(row => {
-      const rawCounty = (row[UPDATES_FORM_HEADERS.county] || '').trim();
+      const rawCounty = getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.county);
       const county_id = VALID_COUNTY_IDS.has(rawCounty) ? rawCounty : COUNTY_LABEL_TO_ID[rawCounty];
-      const title = (row[UPDATES_FORM_HEADERS.title] || '').trim();
+      const title = getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.title);
       if (!county_id || !title) return;
-      const date = normalizeDate(row[UPDATES_FORM_HEADERS.date]);
-      const tagsRaw = (row[UPDATES_FORM_HEADERS.tags] || '').trim();
+      const date = normalizeDate(getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.date));
+      const tagsRaw = getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.tags);
       if (!window.SHEET_DATA.updates[county_id]) window.SHEET_DATA.updates[county_id] = [];
       window.SHEET_DATA.updates[county_id].push({
         id: `gs-${county_id}-${date}-${title.slice(0, 8).replace(/\s/g, '')}`,
         date,
         title,
-        body: (row[UPDATES_FORM_HEADERS.body] || '').trim(),
-        source: (row[UPDATES_FORM_HEADERS.source] || '').trim(),
+        body: getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.body),
+        source: getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.source),
         tags: tagsRaw ? tagsRaw.split(';').map(t => t.trim()).filter(Boolean) : []
       });
     });
