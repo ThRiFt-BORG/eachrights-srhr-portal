@@ -437,7 +437,7 @@ function renderDocsViewer(){
 async function refreshSheetData(){
   const result = document.getElementById('gs-test-result');
   result.textContent = 'Refreshing from Google Sheets...';
-  window.SHEET_DATA = { policies: {}, updates: {} };
+  window.SHEET_DATA = { policies: {}, updates: {}, advocacy: {} };
   await window.loadGoogleSheetsData();
   updateConnectionStatus();
   const ok = window.SHEET_STATUS.policies === 'ok' && window.SHEET_STATUS.updates === 'ok';
