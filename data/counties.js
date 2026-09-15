@@ -408,7 +408,10 @@ window.loadGoogleSheetsData = async function() {
       window.SHEET_DATA.policies[county_id].push({
         id: policy_id,
         status: (row.status || '').trim(),
-        impl_pct: clampPct(row.impl_pct),
+        // A blank cell means "leave the existing value alone", the same as status,
+        // gap and doc_url. Without this, blank became 0 and silently zeroed the
+        // progress bar of every policy given a row in the sheet.
+        impl_pct: String(row.impl_pct ?? '').trim() === '' ? undefined : clampPct(row.impl_pct),
         gap: (row.gap || '').trim(),
         doc_url: window.safeUrl(row.doc_url || '')
       });

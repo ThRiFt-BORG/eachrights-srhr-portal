@@ -106,6 +106,15 @@ img{max-width:100%;}
 .pill-notstarted{background:#e2e3e5;color:#383d41;}
 .pill-inprogress{background:#fff3cd;color:#856404;}
 .pill-completed{background:#d4edda;color:#155724;}
+/* Statuses written by the Quarterly Tracking form, plus values already in use
+   in the baseline data. Same four-colour vocabulary as above: green = done,
+   amber = under way, blue = in process, grey = not yet known. */
+.pill-substantiallyimplemented{background:#d4edda;color:#155724;}
+.pill-fullyimplemented{background:#d4edda;color:#155724;}
+.pill-earlystage{background:#fff3cd;color:#856404;}
+.pill-limitedimplementation{background:#fff3cd;color:#856404;}
+.pill-underreview{background:#d1ecf1;color:#0c5460;}
+.pill-notyetassessed{background:#e2e3e5;color:#383d41;}
 
 /* ── PRIORITY BADGE ── */
 /* ── UPDATES FEED ── */
