@@ -26,8 +26,6 @@
 .cap-item.gap::before{content:'✗';position:absolute;left:0;color:var(--red);}
 .print-btn{display:inline-flex;align-items:center;gap:6px;background:var(--lime);color:var(--sidebar);border:none;padding:8px 16px;border-radius:4px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 .print-btn:hover{background:#6AA127;}
-.update-add-toggle{background:none;border:1px solid var(--green);color:var(--green);padding:6px 14px;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:12px;}
-.update-add-toggle:hover{background:var(--green-lt);}
 .status-note{background:var(--lime-lt);border-left:3px solid var(--lime);padding:10px 14px;font-size:13px;border-radius:0 4px 4px 0;margin-top:10px;color:var(--ink-mid);}
 .section-gold{background:var(--lime-lt);}
 .section-green{background:var(--green-lt);}
@@ -74,7 +72,6 @@
   <div class="nav-links">
     <a href="index.html">← Counties</a>
     <a href="resources.html">Resources</a>
-    <a href="admin.html">⚙ Admin</a>
     <button onclick="window.print()" class="print-btn">⎙ Print Profile</button>
   </div>
   <div class="nav-right" id="nav-county-name"></div>
@@ -119,7 +116,7 @@
           <tbody id="policy-tbody"></tbody>
         </table>
       </div>
-      <div class="status-note">💡 <strong>To update policy status:</strong> edit the Policies tab of the Google Sheet (approved staff only), then refresh this page. Step-by-step instructions are in the <a href="admin.html" style="color:var(--green);font-weight:600;">Admin Panel guide</a>. No coding required.</div>
+      <div class="status-note">💡 <strong>To update policy status:</strong> edit the Policies tab of the Google Sheet (approved staff only), then refresh this page. Step-by-step instructions are in the Admin Panel guide. No coding required.</div>
     </div>
 
     <!-- DISABILITY INCLUSION BRIEF (only rendered for counties with a brief) -->
@@ -163,8 +160,6 @@
     <div class="section no-print" style="padding:0 0 28px;">
       <div class="section-hd"><h2>Updates &amp; Reports</h2><span class="meta">Field reports and advocacy progress</span></div>
       <div id="updates-feed"></div>
-      <button class="update-add-toggle" id="add-update-btn" onclick="window.open(window.UPDATES_FORM_URL,'_blank','noopener')">+ Add Update</button>
-      <p style="font-size:13px;color:var(--ink-lt);margin-top:6px;">Opens a short form to submit a field update. It appears here automatically — refresh the page after submitting.</p>
     </div>
 
   </div>
@@ -384,7 +379,7 @@ C.advocacy_materials.forEach(row => {
 // Updates — from merged county data (Form-fed sheet + base)
 const feed = document.getElementById('updates-feed');
 function renderUpdates(arr){
-  feed.innerHTML = arr.length?'':'<p style="color:var(--ink-lt);font-size:14px;">No updates yet. Use the "+ Add Update" button below.</p>';
+  feed.innerHTML = arr.length?'':'<p style="color:var(--ink-lt);font-size:14px;">No updates published yet.</p>';
   arr.forEach(u=>{
     const tags=(u.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
     feed.innerHTML+=`<div class="update-item"><div class="update-date">${esc((u.date||'').slice(0,10))}</div><div class="update-body"><h4 style="font-size:15px;">${esc(u.title)}</h4><p style="font-size:14px;">${esc(u.body)}</p><div class="update-source">Source: ${esc(u.source)} &nbsp;${tags}</div></div></div>`;

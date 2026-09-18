@@ -100,6 +100,7 @@
     <a href="#" onclick="showSection('sheets','this')">📊 Google Sheets</a>
     <a href="#" onclick="showSection('documents','this')">📎 Documents</a>
     <h3>System</h3>
+    <a href="#" onclick="showSection('training','this')">🎓 Training Guides</a>
     <a href="#" onclick="showSection('guide','this')">📖 How-To Guide</a>
   </div>
 
@@ -193,6 +194,16 @@
     </div>
 
     <!-- HOW-TO GUIDE -->
+    <!-- TRAINING GUIDES -->
+    <div class="admin-section" id="section-training">
+      <div class="admin-card">
+        <h2>🎓 Training Guides</h2>
+        <div class="sub">The two written guides for the portal, held in Google Drive.</div>
+        <div class="guide-note">🔒 These open only for signed-in EACHRights accounts. If you are asked to request access, you are signed in to the wrong Google account.</div>
+        <div class="quick-actions" id="training-guides"></div>
+      </div>
+    </div>
+
     <div class="admin-section" id="section-guide">
       <div class="admin-card">
         <h2>📖 Complete Guide — How to Update the Dashboard</h2>
@@ -224,7 +235,7 @@
         <!-- SECTION B -->
         <div class="guide-section">
           <h3>B. How to Add a Field Update / Report</h3>
-          <div class="gs-step"><div class="num">1</div><div class="step-body">Go to any county page and click <strong>"+ Add Update"</strong> (or open the form link directly — ask your supervisor if you don't have it).</div></div>
+          <div class="gs-step"><div class="num">1</div><div class="step-body">Open <strong>Report a Field Update</strong> from the shortcuts at the top of this page. The county pages are read-only, so submissions start here.</div></div>
           <div class="gs-step"><div class="num">2</div><div class="step-body">Fill in the form: County, Date of Event, Update Title, Description, Source/Organization, and optional Tags.</div></div>
           <div class="gs-step"><div class="num">3</div><div class="step-body">Submit. The form writes directly into the Updates sheet — no manual sheet editing, no risk of typos in county names since it's a dropdown.</div></div>
           <div class="gs-step"><div class="num">4</div><div class="step-body">Refresh the county page on the portal — your update appears in the Updates feed within seconds.</div></div>
@@ -295,6 +306,22 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="data/counties.js"></script>
 <script>
+// ── STAFF LINKS ────────────────────────────────────────────────────────────
+// These live here rather than in data/counties.js because that file is loaded
+// by every public page, which would hand these links to every visitor. This
+// page is not linked from anywhere public, so it is the right home for them.
+// If a form is ever rebuilt, this is the one place its link has to change.
+
+// The three staff-facing Google Forms.
+window.UPDATES_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSc1QzUfbPAhX3j0ZWK7QJflkBdjcywsXPCtAtjLOljk0TFXeA/viewform";
+window.TRACKING_TOOL_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd6hzIDoZ5kKE86pLDAAEIc1qBDX-ulSs1JwjBfVnCY_-m6KA/viewform";
+window.MATERIALS_UPLOAD_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeZOmG-eeoaEFy-MOKKGVSGZKLoUSKLtN2nxUrDornOrxy0CA/viewform";
+
+// The two training guides, held in Google Drive with sharing restricted to
+// EACHRights accounts. Paste the two share links between the quotes.
+window.SYSTEM_DESCRIPTION_URL = "";
+window.TRAINING_MODULE_URL = "";
+
 // ── QUICK ACTIONS — links to the 3 staff-facing Google Forms ──
 document.getElementById('quick-actions').innerHTML = `
   <a class="quick-action" href="${esc(window.UPDATES_FORM_URL)}" target="_blank" rel="noopener noreferrer">
@@ -313,6 +340,30 @@ document.getElementById('quick-actions').innerHTML = `
     <span class="qa-sub">Submit a completed brief, flyer, or social media card for a tracked policy.</span>
   </a>
 `;
+
+// ── TRAINING GUIDES ──
+// Links come from data/counties.js. Until the Drive links are filled in there,
+// the section says so plainly rather than rendering a dead link.
+(function renderTrainingGuides(){
+  const guides = [
+    { url: window.SYSTEM_DESCRIPTION_URL, icon: '📘', title: 'System Description',
+      sub: 'What the portal is, where each piece of information lives, and how it flows from a form to the dashboard.' },
+    { url: window.TRAINING_MODULE_URL, icon: '📗', title: 'Training Module',
+      sub: 'The hands-on guide: how to reach the portal, read it, add information and check that a change worked.' }
+  ];
+  const el = document.getElementById('training-guides');
+  const linked = guides.filter(g => window.safeUrl(g.url));
+  if (!linked.length) {
+    el.innerHTML = '<p style="font-size:13px;color:var(--ink-lt);">The guides have not been linked yet. Upload both to the EACHRights Drive, restrict sharing to the organisation, then paste the two share links into <code>data/counties.js</code>.</p>';
+    return;
+  }
+  el.innerHTML = linked.map(g => `
+    <a class="quick-action" href="${esc(window.safeUrl(g.url))}" target="_blank" rel="noopener noreferrer">
+      <span class="qa-icon">${g.icon}</span>
+      <span class="qa-title">${esc(g.title)}</span>
+      <span class="qa-sub">${esc(g.sub)}</span>
+    </a>`).join('');
+})();
 
 // ── NAV ──
 function showSection(id, el){

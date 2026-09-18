@@ -293,7 +293,7 @@ window.COUNTIES = [
 // Stored in memory only (window.SHEET_DATA) — no localStorage conflicts.
 // county.html merges sheet data over base COUNTIES data before rendering.
 // Policies tab: edited directly by trusted staff (see admin.html guide).
-// Updates tab: fed by a public Google Form — see FORM_URL below.
+// Updates tab: fed by a Google Form, then gated by the 'Show on site' column.
 
 const GS_DEFAULTS = {
   policies:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=0&single=true&output=csv",
@@ -301,14 +301,9 @@ const GS_DEFAULTS = {
   advocacy:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-PmarsL1CDHiaanaytyeO1f7iCgUrKWl6TAD-Esc2ZmyRuSd8xKetPXDutVKOkwJe4ldoUyGkLw4w/pub?gid=1539470058&single=true&output=csv"
 };
 
-// URL of the public Google Form staff use to submit a new Update.
-window.UPDATES_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSc1QzUfbPAhX3j0ZWK7QJflkBdjcywsXPCtAtjLOljk0TFXeA/viewform";
-
-// URL of the quarterly Advocacy Tracking and Documentation Tool form.
-window.TRACKING_TOOL_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd6hzIDoZ5kKE86pLDAAEIc1qBDX-ulSs1JwjBfVnCY_-m6KA/viewform";
-
-// URL of the Advocacy Materials Document Upload form.
-window.MATERIALS_UPLOAD_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeZOmG-eeoaEFy-MOKKGVSGZKLoUSKLtN2nxUrDornOrxy0CA/viewform";
+// The Google Form and training-guide links are deliberately NOT here. This file
+// is loaded by every public page, so anything in it is served to every visitor.
+// They live in admin.html instead, which is the only page that uses them.
 
 const VALID_COUNTY_IDS = new Set(['homa-bay', 'migori', 'kilifi', 'kwale']);
 const VALID_MILESTONE_IDS = new Set(window.ADVOCACY_MILESTONES.map(m => m.id));
@@ -321,7 +316,10 @@ const UPDATES_FORM_HEADERS = {
   title: 'Update Title',
   body: 'Description',
   source: 'Source/ Organization',
-  tags: 'Tags( optional, separate with ;  )'
+  tags: 'Tags( optional, separate with ;  )',
+  // Review gate. A tick box column added by hand to the Updates tab, to the
+  // right of the columns the form writes. Name it exactly this in the sheet.
+  approved: 'Show on site'
 };
 const COUNTY_LABEL_TO_ID = { 'Homa Bay': 'homa-bay', 'Migori': 'migori', 'Kilifi': 'kilifi', 'Kwale': 'kwale' };
 
@@ -339,6 +337,14 @@ window.safeUrl = function(url) {
 window.slugStatus = function(status) {
   return 'pill-' + String(status ?? '').toLowerCase().replace(/[\s\/\-]+/g, '');
 };
+
+// Google exports a ticked box as "TRUE" and an unticked one as "FALSE". Blank
+// means the script has not written to the cell yet, which is treated as NOT
+// approved. The wider set of spellings is here so that a staff member typing
+// "yes" by hand into the column still works as they expect.
+function isApprovedFlag(value) {
+  return /^(true|yes|y|1|approved)$/i.test(String(value ?? '').trim());
+}
 
 function clampPct(n) {
   const v = parseInt(n, 10);
@@ -428,11 +434,23 @@ window.loadGoogleSheetsData = async function() {
     const text2 = await res2.text();
     const parsed2 = Papa.parse(text2.trim(), { header: true, skipEmptyLines: true });
     const updatesHeaderMap = buildHeaderKeyMap(parsed2.meta.fields);
+    // The review gate is only enforced when the column actually exists. If it is
+    // absent, every row renders, which is how the sheet behaved before the gate
+    // was introduced, so deleting the column degrades to the old behaviour
+    // rather than emptying every county feed.
+    const gateIsActive = Object.prototype.hasOwnProperty.call(
+      updatesHeaderMap, normalizeHeader(UPDATES_FORM_HEADERS.approved)
+    );
     parsed2.data.forEach(row => {
       const rawCounty = getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.county);
       const county_id = VALID_COUNTY_IDS.has(rawCounty) ? rawCounty : COUNTY_LABEL_TO_ID[rawCounty];
       const title = getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.title);
       if (!county_id || !title) return;
+      // Anything submitted through the open Field Update Form lands here
+      // unapproved and stays off the public dashboard until a staff member
+      // ticks it in the Updates tab. Fail closed: unticked, blank and
+      // unrecognised values are all treated as not approved.
+      if (gateIsActive && !isApprovedFlag(getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.approved))) return;
       const date = normalizeDate(getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.date));
       const tagsRaw = getByHeader(row, updatesHeaderMap, UPDATES_FORM_HEADERS.tags);
       if (!window.SHEET_DATA.updates[county_id]) window.SHEET_DATA.updates[county_id] = [];
